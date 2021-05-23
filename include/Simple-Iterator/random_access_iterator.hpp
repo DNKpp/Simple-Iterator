@@ -113,7 +113,8 @@ namespace sl::itr
 			class TDescriptorType = std::add_pointer_t<TValueType>,
 			std::signed_integral TDifferenceType = int,
 			auto VAdvance = std::plus<>{},
-			auto VDereference = dereference{}>
+			auto VDereference = dereference{}
+	>
 	class random_access_iterator :
 		public detail::base_random_access_iterator<TValueType,
 													random_access_iterator<TValueType,

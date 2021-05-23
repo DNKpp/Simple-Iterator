@@ -21,7 +21,8 @@ namespace sl::itr::detail
 			std::signed_integral TDifferenceType = int,
 			auto VAdvance = std::plus<>{},
 			auto VDereference = dereference{},
-			class TIteratorCategory = std::input_iterator_tag>
+			class TIteratorCategory = std::input_iterator_tag
+	>
 	class base_input_iterator :
 		public base_iterator<T,
 							TIterator,

@@ -84,7 +84,8 @@ namespace sl::itr
 			class TDescriptorType = std::add_pointer_t<TValueType>,
 			std::signed_integral TDifferenceType = int,
 			auto VAdvance = std::plus<>{},
-			auto VDereference = dereference{}>
+			auto VDereference = dereference{}
+	>
 	class bidirectional_iterator :
 		public detail::base_bidirectional_iterator<TValueType,
 													bidirectional_iterator<TValueType,
