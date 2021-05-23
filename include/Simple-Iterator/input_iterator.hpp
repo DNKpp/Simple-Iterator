@@ -57,7 +57,7 @@ namespace sl::itr::detail
 	protected:
 		constexpr base_input_iterator() noexcept = default;
 
-		constexpr base_input_iterator(TDescriptor descriptor) noexcept :
+		constexpr explicit base_input_iterator(TDescriptor descriptor) noexcept :
 			super{ descriptor }
 		{
 		}
@@ -116,7 +116,7 @@ namespace sl::itr
 	public:
 		constexpr input_iterator() noexcept = default;
 
-		constexpr input_iterator(TDescriptorType descriptor) noexcept :
+		constexpr explicit input_iterator(TDescriptorType descriptor) noexcept :
 			super{ descriptor }
 		{
 		}

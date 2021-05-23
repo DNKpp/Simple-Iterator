@@ -48,8 +48,8 @@ namespace sl::itr::detail
 	protected:
 		constexpr base_contiguous_iterator() noexcept = default;
 
-		constexpr base_contiguous_iterator(value_type* ptr) noexcept :
-			super{ ptr }
+		constexpr explicit base_contiguous_iterator(TDescriptor descriptor) noexcept :
+			super{ descriptor }
 		{
 		}
 
@@ -102,7 +102,7 @@ namespace sl::itr
 	public:
 		constexpr contiguous_iterator() noexcept = default;
 
-		constexpr contiguous_iterator(TDescriptorType descriptor) noexcept :
+		constexpr explicit contiguous_iterator(TDescriptorType descriptor) noexcept :
 			super{ descriptor }
 		{
 		}

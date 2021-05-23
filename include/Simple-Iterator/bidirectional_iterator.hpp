@@ -58,8 +58,8 @@ namespace sl::itr::detail
 	protected:
 		constexpr base_bidirectional_iterator() noexcept = default;
 
-		constexpr base_bidirectional_iterator(value_type* ptr) noexcept :
-			super{ ptr }
+		constexpr explicit base_bidirectional_iterator(TDescriptor descriptor) noexcept :
+			super{ descriptor }
 		{
 		}
 
@@ -118,7 +118,7 @@ namespace sl::itr
 	public:
 		constexpr bidirectional_iterator() noexcept = default;
 
-		constexpr bidirectional_iterator(TDescriptorType descriptor) noexcept :
+		constexpr explicit bidirectional_iterator(TDescriptorType descriptor) noexcept :
 			super{ descriptor }
 		{
 		}

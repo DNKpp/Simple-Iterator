@@ -45,8 +45,8 @@ namespace sl::itr::detail
 	protected:
 		constexpr base_forward_iterator() noexcept = default;
 
-		constexpr base_forward_iterator(value_type* ptr) noexcept :
-			super{ ptr }
+		constexpr explicit base_forward_iterator(TDescriptor descriptor) noexcept :
+			super{ descriptor }
 		{
 		}
 
@@ -105,7 +105,7 @@ namespace sl::itr
 	public:
 		constexpr forward_iterator() noexcept = default;
 
-		constexpr forward_iterator(TDescriptorType descriptor) noexcept :
+		constexpr explicit forward_iterator(TDescriptorType descriptor) noexcept :
 			super{ descriptor }
 		{
 		}

@@ -93,8 +93,8 @@ namespace sl::itr::detail
 	protected:
 		constexpr base_random_access_iterator() noexcept = default;
 
-		constexpr base_random_access_iterator(value_type* ptr) noexcept :
-			super{ ptr }
+		constexpr explicit base_random_access_iterator(TDescriptor descriptor) noexcept :
+			super{ descriptor }
 		{
 		}
 
@@ -147,7 +147,7 @@ namespace sl::itr
 	public:
 		constexpr random_access_iterator() noexcept = default;
 
-		constexpr random_access_iterator(TDescriptorType descriptor) noexcept :
+		constexpr explicit random_access_iterator(TDescriptorType descriptor) noexcept :
 			super{ descriptor }
 		{
 		}

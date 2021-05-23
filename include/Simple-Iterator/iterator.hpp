@@ -56,7 +56,7 @@ namespace sl::itr::detail
 
 		constexpr base_iterator() noexcept = default;
 
-		constexpr base_iterator(TDescriptor descriptor) noexcept :
+		constexpr explicit base_iterator(TDescriptor descriptor) noexcept :
 			m_Descriptor{ descriptor }
 		{
 		}
