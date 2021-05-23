@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include "utility.hpp"
+
 #include <iterator>
 #include <type_traits>
 #include <functional>
@@ -15,32 +17,34 @@
 
 namespace sl::itr::detail
 {
-	template <class T,
-			class TIterator,
-			class TDescriptor,
-			std::signed_integral TDifference,
+	template <class TValueType,
+			class TMostDerivedIteratorType,
+			class TDescriptorType,
+			std::signed_integral TDifferenceType,
 			auto VAdvance,
 			auto VDereference,
-			class TIteratorCategory
+			iterator_category_tag TIteratorCategory
 	>
+		requires advance_for<decltype(VAdvance), TDescriptorType, TDifferenceType> &&
+				dereference_for<decltype(VDereference), TDescriptorType>
 	class base_iterator
 	{
 	public:
 		// typedefs to keep the stl happy
-		using value_type = T;
-		using difference_type = TDifference;
+		using value_type = TValueType;
+		using difference_type = TDifferenceType;
 		using iterator_concept = TIteratorCategory;
 
-		constexpr TIterator& operator ++() noexcept
+		constexpr TMostDerivedIteratorType& operator ++() noexcept
 		{
 			m_Descriptor = std::invoke(VAdvance, m_Descriptor, 1);
-			return static_cast<TIterator&>(*this);
+			return static_cast<TMostDerivedIteratorType&>(*this);
 		}
 
 		[[nodiscard]]
-		constexpr TIterator operator ++(int) noexcept
+		constexpr TMostDerivedIteratorType operator ++(int) noexcept
 		{
-			auto tmp{ static_cast<TIterator&>(*this) };
+			auto tmp{ static_cast<TMostDerivedIteratorType&>(*this) };
 			++(*this);
 			return tmp;
 		}
@@ -52,11 +56,11 @@ namespace sl::itr::detail
 		}
 
 	protected:
-		TDescriptor m_Descriptor{};
+		TDescriptorType m_Descriptor{};
 
 		constexpr base_iterator() noexcept = default;
 
-		constexpr explicit base_iterator(TDescriptor descriptor) noexcept :
+		constexpr explicit base_iterator(TDescriptorType descriptor) noexcept :
 			m_Descriptor{ descriptor }
 		{
 		}

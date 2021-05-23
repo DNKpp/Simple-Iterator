@@ -12,27 +12,28 @@
 
 namespace sl::itr::detail
 {
-	template <class T,
-			class TIterator,
-			class TDescriptor = std::add_pointer_t<T>,
+	template <class TValueType,
+			class TMostDerivedIteratorType,
+			class TDescriptorType = std::add_pointer_t<TValueType>,
 			std::signed_integral TDifferenceType = int,
 			auto VAdvance = std::plus<>{},
 			auto VDereference = dereference{},
-			class TIteratorCategory = std::forward_iterator_tag
-	>
+			iterator_category_tag TIteratorCategory = std::forward_iterator_tag>
+		requires advance_for<decltype(VAdvance), TDescriptorType, TDifferenceType> &&
+				dereference_for<decltype(VDereference), TDescriptorType>
 	class base_forward_iterator :
-		public base_input_iterator<T,
-									TIterator,
-									TDescriptor,
+		public base_input_iterator<TValueType,
+									TMostDerivedIteratorType,
+									TDescriptorType,
 									TDifferenceType,
 									VAdvance,
 									VDereference,
 									TIteratorCategory
 		>
 	{
-		using super = base_input_iterator<T,
-										TIterator,
-										TDescriptor,
+		using super = base_input_iterator<TValueType,
+										TMostDerivedIteratorType,
+										TDescriptorType,
 										TDifferenceType,
 										VAdvance,
 										VDereference,
@@ -45,7 +46,7 @@ namespace sl::itr::detail
 	protected:
 		constexpr base_forward_iterator() noexcept = default;
 
-		constexpr explicit base_forward_iterator(TDescriptor descriptor) noexcept :
+		constexpr explicit base_forward_iterator(TDescriptorType descriptor) noexcept :
 			super{ descriptor }
 		{
 		}
@@ -72,7 +73,10 @@ namespace sl::itr
 			class TDescriptorType = std::add_pointer_t<TValueType>,
 			std::signed_integral TDifferenceType = int,
 			auto VAdvance = std::plus<>{},
-			auto VDereference = dereference{}>
+			auto VDereference = dereference{}
+	>
+		requires advance_for<decltype(VAdvance), TDescriptorType, TDifferenceType> &&
+				dereference_for<decltype(VDereference), TDescriptorType>
 	class forward_iterator :
 		public detail::base_forward_iterator<TValueType,
 											forward_iterator<TValueType,
