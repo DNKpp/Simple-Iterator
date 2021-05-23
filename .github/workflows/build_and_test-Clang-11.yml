@@ -1,4 +1,4 @@
-name: Build & Test - Clang-12
+name: Build & Test - Clang-11
 
 on: [push]
 
@@ -13,14 +13,14 @@ jobs:
         cmake-version: '3.19.x'
 
     - uses: seanmiddleditch/gha-setup-ninja@master
-    - name: Install Clang-12
+    - name: Install Clang-11
       run: |
         echo "deb http://mirrors.kernel.org/ubuntu hirsute main universe" | sudo tee -a /etc/apt/sources.list
         sudo apt-get update
-        sudo apt install clang-12
+        sudo apt install clang-11
     - name: Configure & Build
       run: |
-        cmake . -Bbuild_clang -DCMAKE_C_COMPILER=$(which clang-12) -DCMAKE_CXX_COMPILER=$(which clang++-12)
+        cmake . -Bbuild_clang -DCMAKE_C_COMPILER=$(which clang-11) -DCMAKE_CXX_COMPILER=$(which clang++-11)
         cmake --build build_clang
     - name: Test
       run:
