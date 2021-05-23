@@ -19,7 +19,7 @@ jobs:
         sudo apt install clang-10
     - name: Configure & Build
       run: |
-        cmake . -Bbuild_clang -DCMAKE_C_COMPILER=$(which clang-10) -DCMAKE_CXX_COMPILER=$(which clang++-10) -DSIMPLE_LOG_BUILD_EXAMPLES=ON
+        cmake . -Bbuild_clang -DCMAKE_C_COMPILER=$(which clang-10) -DCMAKE_CXX_COMPILER=$(which clang++-10)
         cmake --build build_clang
     - name: Test
       run:

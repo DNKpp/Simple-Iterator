@@ -20,7 +20,7 @@ jobs:
         sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 100 --slave /usr/bin/g++ g++ /usr/bin/g++-10 --slave /usr/bin/gcov gcov /usr/bin/gcov-10
     - name: Configure & Build
       run: |
-        cmake . -Bbuild_gcc -G "Ninja Multi-Config" -DSIMPLE_LOG_BUILD_EXAMPLES=ON
+        cmake . -Bbuild_gcc -G "Ninja Multi-Config"
         cmake --build build_gcc
     - name: Test
       run: 

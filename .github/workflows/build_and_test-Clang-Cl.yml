@@ -14,7 +14,7 @@ jobs:
 
     - name: Configure & Build
       run: |
-        cmake . -Bbuild_clang-cl -T clangcl -DSIMPLE_LOG_BUILD_EXAMPLES=ON
+        cmake . -Bbuild_clang-cl -T clangcl
         cmake --build build_clang-cl
     - name: Test (Clang-Cl)
       run:
