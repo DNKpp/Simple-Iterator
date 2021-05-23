@@ -1,4 +1,4 @@
-# Simple-Log C++20 library
+# Simple-Iterator C++20 library
 
 |windows msvc | windows clang-cl | ubuntu clang | ubuntu gcc|
 -------------|------------------|--------------|--------------
