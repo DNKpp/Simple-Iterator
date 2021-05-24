@@ -60,8 +60,8 @@ namespace sl::itr::detail
 	protected:
 		constexpr base_bidirectional_iterator() noexcept = default;
 
-		constexpr explicit base_bidirectional_iterator(TStateType descriptor) noexcept :
-			super{ descriptor }
+		constexpr explicit base_bidirectional_iterator(TStateType state) noexcept :
+			super{ std::move(state) }
 		{
 		}
 
@@ -122,8 +122,8 @@ namespace sl::itr
 	public:
 		constexpr bidirectional_iterator() noexcept = default;
 
-		constexpr explicit bidirectional_iterator(TStateType descriptor) noexcept :
-			super{ descriptor }
+		constexpr explicit bidirectional_iterator(TStateType state) noexcept :
+			super{ std::move(state) }
 		{
 		}
 

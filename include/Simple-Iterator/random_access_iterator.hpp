@@ -14,15 +14,19 @@ namespace sl::itr::detail
 {
 	template <class T,
 			class TIterator,
-			class TDescriptor = std::add_pointer_t<T>,
+			class TStateType = std::add_pointer_t<T>,
 			std::signed_integral TDifferenceType = int,
+			auto VDistance = std::minus<>{},
 			auto VAdvance = std::plus<>{},
 			auto VDereference = dereference{},
 			class TIteratorCategory = std::random_access_iterator_tag>
+		requires distance_for<decltype(VDistance), TStateType, TDifferenceType> &&
+				advance_for<decltype(VAdvance), TStateType, TDifferenceType> &&
+				dereference_for<decltype(VDereference), TStateType>
 	class base_random_access_iterator :
 		public base_bidirectional_iterator<T,
 											TIterator,
-											TDescriptor,
+											TStateType,
 											TDifferenceType,
 											VAdvance,
 											VDereference,
@@ -31,7 +35,7 @@ namespace sl::itr::detail
 	{
 		using super = base_bidirectional_iterator<T,
 												TIterator,
-												TDescriptor,
+												TStateType,
 												TDifferenceType,
 												VAdvance,
 												VDereference,
@@ -87,14 +91,14 @@ namespace sl::itr::detail
 		[[nodiscard]]
 		friend constexpr difference_type operator -(const TIterator& lhs, const TIterator& rhs) noexcept
 		{
-			return lhs.m_State - rhs.m_State;
+			return std::invoke(VDistance, lhs.m_State, rhs.m_State);
 		}
 
 	protected:
 		constexpr base_random_access_iterator() noexcept = default;
 
-		constexpr explicit base_random_access_iterator(TDescriptor descriptor) noexcept :
-			super{ descriptor }
+		constexpr explicit base_random_access_iterator(TStateType state) noexcept :
+			super{ std::move(state) }
 		{
 		}
 
@@ -110,21 +114,27 @@ namespace sl::itr::detail
 namespace sl::itr
 {
 	template <class TValueType,
-			class TDescriptorType = std::add_pointer_t<TValueType>,
+			class TStateType = std::add_pointer_t<TValueType>,
 			std::signed_integral TDifferenceType = int,
+			auto VDistance = std::minus<>{},
 			auto VAdvance = std::plus<>{},
 			auto VDereference = dereference{}
 	>
+		requires distance_for<decltype(VDistance), TStateType, TDifferenceType> &&
+				advance_for<decltype(VAdvance), TStateType, TDifferenceType> &&
+				dereference_for<decltype(VDereference), TStateType>
 	class random_access_iterator :
 		public detail::base_random_access_iterator<TValueType,
 													random_access_iterator<TValueType,
-																			TDescriptorType,
+																			TStateType,
 																			TDifferenceType,
+																			VDistance,
 																			VAdvance,
 																			VDereference
 													>,
-													TDescriptorType,
+													TStateType,
 													TDifferenceType,
+													VDistance,
 													VAdvance,
 													VDereference,
 													std::random_access_iterator_tag
@@ -132,13 +142,15 @@ namespace sl::itr
 	{
 		using super = detail::base_random_access_iterator<TValueType,
 														random_access_iterator<TValueType,
-																				TDescriptorType,
+																				TStateType,
 																				TDifferenceType,
+																				VDistance,
 																				VAdvance,
 																				VDereference
 														>,
-														TDescriptorType,
+														TStateType,
 														TDifferenceType,
+														VDistance,
 														VAdvance,
 														VDereference,
 														std::random_access_iterator_tag
@@ -147,8 +159,8 @@ namespace sl::itr
 	public:
 		constexpr random_access_iterator() noexcept = default;
 
-		constexpr explicit random_access_iterator(TDescriptorType descriptor) noexcept :
-			super{ descriptor }
+		constexpr explicit random_access_iterator(TStateType state) noexcept :
+			super{ std::move(state) }
 		{
 		}
 

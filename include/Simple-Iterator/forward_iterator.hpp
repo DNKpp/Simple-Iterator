@@ -46,8 +46,8 @@ namespace sl::itr::detail
 	protected:
 		constexpr base_forward_iterator() noexcept = default;
 
-		constexpr explicit base_forward_iterator(TStateType descriptor) noexcept :
-			super{ descriptor }
+		constexpr explicit base_forward_iterator(TStateType state) noexcept :
+			super{ std::move(state) }
 		{
 		}
 
@@ -109,8 +109,8 @@ namespace sl::itr
 	public:
 		constexpr forward_iterator() noexcept = default;
 
-		constexpr explicit forward_iterator(TStateType descriptor) noexcept :
-			super{ descriptor }
+		constexpr explicit forward_iterator(TStateType state) noexcept :
+			super{ std::move(state) }
 		{
 		}
 

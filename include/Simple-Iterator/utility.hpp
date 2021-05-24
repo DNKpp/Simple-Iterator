@@ -37,8 +37,12 @@ namespace sl::itr
 	concept invokable_r = std::invocable<T, TArgs...> && std::convertible_to<std::invoke_result_t<T, TArgs...>, TReturn>;
 
 	template <class T, class TStateType, class TDifferenceType>
-	concept advance_for = std::signed_integral<TDifferenceType> && invokable_r<
-							T, TStateType, TStateType, TDifferenceType>;
+	concept advance_for = std::signed_integral<TDifferenceType> &&
+						invokable_r<T, TStateType, TStateType, TDifferenceType>;
+
+	template <class T, class TStateType, class TDifferenceType>
+	concept distance_for = std::signed_integral<TDifferenceType> &&
+							invokable_r<T, TDifferenceType, TStateType, TStateType>;
 
 	template <class T, class TStateType>
 	concept dereference_for = std::invocable<T, TStateType> && non_void<std::invoke_result_t<T, TStateType>>;

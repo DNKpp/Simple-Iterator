@@ -58,8 +58,8 @@ namespace sl::itr::detail
 	protected:
 		constexpr base_input_iterator() noexcept = default;
 
-		constexpr explicit base_input_iterator(TStateType descriptor) noexcept :
-			super{ descriptor }
+		constexpr explicit base_input_iterator(TStateType state) noexcept :
+			super{ std::move(state) }
 		{
 		}
 
@@ -120,8 +120,8 @@ namespace sl::itr
 	public:
 		constexpr input_iterator() noexcept = default;
 
-		constexpr explicit input_iterator(TStateType descriptor) noexcept :
-			super{ descriptor }
+		constexpr explicit input_iterator(TStateType state) noexcept :
+			super{ std::move(state) }
 		{
 		}
 

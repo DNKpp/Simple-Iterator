@@ -18,16 +18,19 @@ namespace sl::itr::detail
 			class TMostDerivedIteratorType,
 			class TStateType = std::add_pointer_t<TValueType>,
 			std::signed_integral TDifferenceType = int,
+			auto VDistance = std::minus<>{},
 			auto VAdvance = std::plus<>{},
 			auto VDereference = dereference{},
 			iterator_category_tag TIteratorCategory = std::contiguous_iterator_tag>
-		requires advance_for<decltype(VAdvance), TStateType, TDifferenceType> &&
+		requires distance_for<decltype(VDistance), TStateType, TDifferenceType> &&
+				advance_for<decltype(VAdvance), TStateType, TDifferenceType> &&
 				dereference_for<decltype(VDereference), TStateType>
 	class base_contiguous_iterator :
 		public base_random_access_iterator<TValueType,
 											TMostDerivedIteratorType,
 											TStateType,
 											TDifferenceType,
+											VDistance,
 											VAdvance,
 											VDereference,
 											TIteratorCategory
@@ -37,6 +40,7 @@ namespace sl::itr::detail
 												TMostDerivedIteratorType,
 												TStateType,
 												TDifferenceType,
+												VDistance,
 												VAdvance,
 												VDereference,
 												TIteratorCategory
@@ -50,8 +54,8 @@ namespace sl::itr::detail
 	protected:
 		constexpr base_contiguous_iterator() noexcept = default;
 
-		constexpr explicit base_contiguous_iterator(TStateType descriptor) noexcept :
-			super{ descriptor }
+		constexpr explicit base_contiguous_iterator(TStateType state) noexcept :
+			super{ std::move(state) }
 		{
 		}
 
@@ -69,21 +73,25 @@ namespace sl::itr
 	template <class TValueType,
 			class TStateType = std::add_pointer_t<TValueType>,
 			std::signed_integral TDifferenceType = int,
+			auto VDistance = std::minus<>{},
 			auto VAdvance = std::plus<>{},
 			auto VDereference = dereference{}
 	>
-		requires advance_for<decltype(VAdvance), TStateType, TDifferenceType> &&
+		requires distance_for<decltype(VDistance), TStateType, TDifferenceType> &&
+				advance_for<decltype(VAdvance), TStateType, TDifferenceType> &&
 				dereference_for<decltype(VDereference), TStateType>
 	class contiguous_iterator :
 		public detail::base_contiguous_iterator<TValueType,
 												contiguous_iterator<TValueType,
 																	TStateType,
 																	TDifferenceType,
+																	VDistance,
 																	VAdvance,
 																	VDereference
 												>,
 												TStateType,
 												TDifferenceType,
+												VDistance,
 												VAdvance,
 												VDereference,
 												std::contiguous_iterator_tag
@@ -93,11 +101,13 @@ namespace sl::itr
 														contiguous_iterator<TValueType,
 																			TStateType,
 																			TDifferenceType,
+																			VDistance,
 																			VAdvance,
 																			VDereference
 														>,
 														TStateType,
 														TDifferenceType,
+														VDistance,
 														VAdvance,
 														VDereference,
 														std::contiguous_iterator_tag
@@ -106,8 +116,8 @@ namespace sl::itr
 	public:
 		constexpr contiguous_iterator() noexcept = default;
 
-		constexpr explicit contiguous_iterator(TStateType descriptor) noexcept :
-			super{ descriptor }
+		constexpr explicit contiguous_iterator(TStateType state) noexcept :
+			super{ std::move(state) }
 		{
 		}
 

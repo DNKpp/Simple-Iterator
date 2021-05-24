@@ -60,8 +60,8 @@ namespace sl::itr::detail
 
 		constexpr base_iterator() noexcept = default;
 
-		constexpr explicit base_iterator(TStateType descriptor) noexcept :
-			m_State{ descriptor }
+		constexpr explicit base_iterator(TStateType state) noexcept :
+			m_State{ std::move(state) }
 		{
 		}
 
