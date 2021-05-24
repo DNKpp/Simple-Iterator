@@ -17,17 +17,17 @@ namespace sl::itr::detail
 {
 	template <class TValueType,
 			class TMostDerivedIteratorType,
-			class TDescriptorType = std::add_pointer_t<TValueType>,
+			class TStateType = std::add_pointer_t<TValueType>,
 			std::signed_integral TDifferenceType = int,
 			auto VAdvance = std::plus<>{},
 			auto VDereference = dereference{},
 			iterator_category_tag TIteratorCategory = std::input_iterator_tag>
-		requires advance_for<decltype(VAdvance), TDescriptorType, TDifferenceType> &&
-				dereference_for<decltype(VDereference), TDescriptorType>
+		requires advance_for<decltype(VAdvance), TStateType, TDifferenceType> &&
+				dereference_for<decltype(VDereference), TStateType>
 	class base_input_iterator :
 		public base_iterator<TValueType,
 							TMostDerivedIteratorType,
-							TDescriptorType,
+							TStateType,
 							TDifferenceType,
 							VAdvance,
 							VDereference,
@@ -36,7 +36,7 @@ namespace sl::itr::detail
 	{
 		using super = base_iterator<TValueType,
 									TMostDerivedIteratorType,
-									TDescriptorType,
+									TStateType,
 									TDifferenceType,
 									VAdvance,
 									VDereference,
@@ -58,7 +58,7 @@ namespace sl::itr::detail
 	protected:
 		constexpr base_input_iterator() noexcept = default;
 
-		constexpr explicit base_input_iterator(TDescriptorType descriptor) noexcept :
+		constexpr explicit base_input_iterator(TStateType descriptor) noexcept :
 			super{ descriptor }
 		{
 		}
@@ -81,22 +81,22 @@ namespace sl::itr::detail
 namespace sl::itr
 {
 	template <class TValueType,
-			class TDescriptorType = std::add_pointer_t<TValueType>,
+			class TStateType = std::add_pointer_t<TValueType>,
 			std::signed_integral TDifferenceType = int,
 			auto VAdvance = std::plus<>{},
 			auto VDereference = dereference{}
 	>
-		requires advance_for<decltype(VAdvance), TDescriptorType, TDifferenceType> &&
-				dereference_for<decltype(VDereference), TDescriptorType>
+		requires advance_for<decltype(VAdvance), TStateType, TDifferenceType> &&
+				dereference_for<decltype(VDereference), TStateType>
 	class input_iterator :
 		public detail::base_input_iterator<TValueType,
 											input_iterator<TValueType,
-															TDescriptorType,
+															TStateType,
 															TDifferenceType,
 															VAdvance,
 															VDereference
 											>,
-											TDescriptorType,
+											TStateType,
 											TDifferenceType,
 											VAdvance,
 											VDereference,
@@ -105,12 +105,12 @@ namespace sl::itr
 	{
 		using super = detail::base_input_iterator<TValueType,
 												input_iterator<TValueType,
-																TDescriptorType,
+																TStateType,
 																TDifferenceType,
 																VAdvance,
 																VDereference
 												>,
-												TDescriptorType,
+												TStateType,
 												TDifferenceType,
 												VAdvance,
 												VDereference,
@@ -120,7 +120,7 @@ namespace sl::itr
 	public:
 		constexpr input_iterator() noexcept = default;
 
-		constexpr explicit input_iterator(TDescriptorType descriptor) noexcept :
+		constexpr explicit input_iterator(TStateType descriptor) noexcept :
 			super{ descriptor }
 		{
 		}

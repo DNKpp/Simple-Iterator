@@ -50,20 +50,20 @@ namespace sl::itr::detail
 
 		TIterator& operator +=(difference_type value) noexcept
 		{
-			this->m_Descriptor = std::invoke(VAdvance, this->m_Descriptor, value);
+			this->m_State = std::invoke(VAdvance, this->m_State, value);
 			return static_cast<TIterator&>(*this);
 		}
 
 		TIterator& operator -=(difference_type value) noexcept
 		{
-			this->m_Descriptor = std::invoke(VAdvance, this->m_Descriptor, -value);
+			this->m_State = std::invoke(VAdvance, this->m_State, -value);
 			return static_cast<TIterator&>(*this);
 		}
 
 		[[nodiscard]]
 		value_type& operator [](difference_type dist) const noexcept
 		{
-			return *(this->m_Descriptor + dist);
+			return *(this->m_State + dist);
 		}
 
 		[[nodiscard]]
@@ -87,7 +87,7 @@ namespace sl::itr::detail
 		[[nodiscard]]
 		friend constexpr difference_type operator -(const TIterator& lhs, const TIterator& rhs) noexcept
 		{
-			return lhs.m_Descriptor - rhs.m_Descriptor;
+			return lhs.m_State - rhs.m_State;
 		}
 
 	protected:

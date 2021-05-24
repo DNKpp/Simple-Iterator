@@ -36,12 +36,12 @@ namespace sl::itr
 	template <class T, class TReturn, class... TArgs>
 	concept invokable_r = std::invocable<T, TArgs...> && std::convertible_to<std::invoke_result_t<T, TArgs...>, TReturn>;
 
-	template <class T, class TDescriptorType, class TDifferenceType>
+	template <class T, class TStateType, class TDifferenceType>
 	concept advance_for = std::signed_integral<TDifferenceType> && invokable_r<
-							T, TDescriptorType, TDescriptorType, TDifferenceType>;
+							T, TStateType, TStateType, TDifferenceType>;
 
-	template <class T, class TDescriptorType>
-	concept dereference_for = std::invocable<T, TDescriptorType> && non_void<std::invoke_result_t<T, TDescriptorType>>;
+	template <class T, class TStateType>
+	concept dereference_for = std::invocable<T, TStateType> && non_void<std::invoke_result_t<T, TStateType>>;
 
 	template <class T, class... TOthers>
 	concept same_as_any = (std::same_as<T, TOthers> || ...);

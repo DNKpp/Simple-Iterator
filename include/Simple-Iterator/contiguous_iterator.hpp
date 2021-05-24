@@ -16,17 +16,17 @@ namespace sl::itr::detail
 {
 	template <class TValueType,
 			class TMostDerivedIteratorType,
-			class TDescriptorType = std::add_pointer_t<TValueType>,
+			class TStateType = std::add_pointer_t<TValueType>,
 			std::signed_integral TDifferenceType = int,
 			auto VAdvance = std::plus<>{},
 			auto VDereference = dereference{},
 			iterator_category_tag TIteratorCategory = std::contiguous_iterator_tag>
-		requires advance_for<decltype(VAdvance), TDescriptorType, TDifferenceType> &&
-				dereference_for<decltype(VDereference), TDescriptorType>
+		requires advance_for<decltype(VAdvance), TStateType, TDifferenceType> &&
+				dereference_for<decltype(VDereference), TStateType>
 	class base_contiguous_iterator :
 		public base_random_access_iterator<TValueType,
 											TMostDerivedIteratorType,
-											TDescriptorType,
+											TStateType,
 											TDifferenceType,
 											VAdvance,
 											VDereference,
@@ -35,7 +35,7 @@ namespace sl::itr::detail
 	{
 		using super = base_random_access_iterator<TValueType,
 												TMostDerivedIteratorType,
-												TDescriptorType,
+												TStateType,
 												TDifferenceType,
 												VAdvance,
 												VDereference,
@@ -50,7 +50,7 @@ namespace sl::itr::detail
 	protected:
 		constexpr base_contiguous_iterator() noexcept = default;
 
-		constexpr explicit base_contiguous_iterator(TDescriptorType descriptor) noexcept :
+		constexpr explicit base_contiguous_iterator(TStateType descriptor) noexcept :
 			super{ descriptor }
 		{
 		}
@@ -67,22 +67,22 @@ namespace sl::itr::detail
 namespace sl::itr
 {
 	template <class TValueType,
-			class TDescriptorType = std::add_pointer_t<TValueType>,
+			class TStateType = std::add_pointer_t<TValueType>,
 			std::signed_integral TDifferenceType = int,
 			auto VAdvance = std::plus<>{},
 			auto VDereference = dereference{}
 	>
-		requires advance_for<decltype(VAdvance), TDescriptorType, TDifferenceType> &&
-				dereference_for<decltype(VDereference), TDescriptorType>
+		requires advance_for<decltype(VAdvance), TStateType, TDifferenceType> &&
+				dereference_for<decltype(VDereference), TStateType>
 	class contiguous_iterator :
 		public detail::base_contiguous_iterator<TValueType,
 												contiguous_iterator<TValueType,
-																	TDescriptorType,
+																	TStateType,
 																	TDifferenceType,
 																	VAdvance,
 																	VDereference
 												>,
-												TDescriptorType,
+												TStateType,
 												TDifferenceType,
 												VAdvance,
 												VDereference,
@@ -91,12 +91,12 @@ namespace sl::itr
 	{
 		using super = detail::base_contiguous_iterator<TValueType,
 														contiguous_iterator<TValueType,
-																			TDescriptorType,
+																			TStateType,
 																			TDifferenceType,
 																			VAdvance,
 																			VDereference
 														>,
-														TDescriptorType,
+														TStateType,
 														TDifferenceType,
 														VAdvance,
 														VDereference,
@@ -106,7 +106,7 @@ namespace sl::itr
 	public:
 		constexpr contiguous_iterator() noexcept = default;
 
-		constexpr explicit contiguous_iterator(TDescriptorType descriptor) noexcept :
+		constexpr explicit contiguous_iterator(TStateType descriptor) noexcept :
 			super{ descriptor }
 		{
 		}

@@ -19,14 +19,14 @@ namespace sl::itr::detail
 {
 	template <class TValueType,
 			class TMostDerivedIteratorType,
-			class TDescriptorType,
+			class TStateType,
 			std::signed_integral TDifferenceType,
 			auto VAdvance,
 			auto VDereference,
 			iterator_category_tag TIteratorCategory
 	>
-		requires advance_for<decltype(VAdvance), TDescriptorType, TDifferenceType> &&
-				dereference_for<decltype(VDereference), TDescriptorType>
+		requires advance_for<decltype(VAdvance), TStateType, TDifferenceType> &&
+				dereference_for<decltype(VDereference), TStateType>
 	class base_iterator
 	{
 	public:
@@ -37,7 +37,7 @@ namespace sl::itr::detail
 
 		constexpr TMostDerivedIteratorType& operator ++() noexcept
 		{
-			m_Descriptor = std::invoke(VAdvance, m_Descriptor, 1);
+			m_State = std::invoke(VAdvance, m_State, 1);
 			return static_cast<TMostDerivedIteratorType&>(*this);
 		}
 
@@ -52,16 +52,16 @@ namespace sl::itr::detail
 		[[nodiscard]]
 		constexpr decltype(auto) operator *() const noexcept
 		{
-			return std::invoke(VDereference, m_Descriptor);
+			return std::invoke(VDereference, m_State);
 		}
 
 	protected:
-		TDescriptorType m_Descriptor{};
+		TStateType m_State{};
 
 		constexpr base_iterator() noexcept = default;
 
-		constexpr explicit base_iterator(TDescriptorType descriptor) noexcept :
-			m_Descriptor{ descriptor }
+		constexpr explicit base_iterator(TStateType descriptor) noexcept :
+			m_State{ descriptor }
 		{
 		}
 
