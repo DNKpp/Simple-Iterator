@@ -63,7 +63,7 @@ namespace sl::itr::detail
 		[[nodiscard]]
 		value_type& operator [](difference_type dist) const noexcept
 		{
-			return *(this->m_State + dist);
+			return std::invoke(VDereference, std::invoke(VAdvance, this->m_State, dist));
 		}
 
 		[[nodiscard]]
