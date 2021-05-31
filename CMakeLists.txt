@@ -4,8 +4,6 @@ project(Simple_Iterator
 	LANGUAGES CXX
 )
 
-include(CTest)
-
 set(TestsDir "${CMAKE_CURRENT_SOURCE_DIR}/test/")
 
 add_library(${PROJECT_NAME} INTERFACE)
@@ -21,6 +19,12 @@ target_compile_features(
 	cxx_std_20
 )
 
-if (BUILD_TESTING)
-	add_subdirectory(${TestsDir})
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+
+	include(CTest)
+
+	if (BUILD_TESTING)
+		add_subdirectory(${TestsDir})
+	endif()
+
 endif()
