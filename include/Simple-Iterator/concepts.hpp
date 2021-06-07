@@ -38,6 +38,9 @@ namespace sl::itr
 
 	template <class T>
 	concept iterator_category_tag = output_iterator_category_tag<T> || input_iterator_category_tag<T>;
+
+	template <class T>
+	concept non_void = !std::same_as<T, void>;
 }
 
 #endif

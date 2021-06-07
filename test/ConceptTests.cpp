@@ -132,3 +132,19 @@ TEMPLATE_TEST_CASE_SIG
 {
 	REQUIRE(iterator_category_tag<TTagType> == VExpected);
 }
+
+#pragma warning(disable: 26444)
+TEMPLATE_TEST_CASE_SIG
+(
+	"non_void concept should detect valid types",
+	"[concept]",
+	((class T, bool VExpected), T, VExpected),
+	(int, true),
+	(void*, true),
+	(const void*, true),
+	(void, false)
+)
+#pragma warning(default: 26444)
+{
+	REQUIRE(non_void<T> == VExpected);
+}
