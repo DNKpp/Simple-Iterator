@@ -58,7 +58,7 @@ namespace sl::itr
 		}
 
 		constexpr void operator ++(int) noexcept(noexcept(++cast()))
-			requires !std::copy_constructible<TDerived>
+			requires (!std::copy_constructible<TDerived>)
 		{
 			auto& self = cast();
 			++self;
