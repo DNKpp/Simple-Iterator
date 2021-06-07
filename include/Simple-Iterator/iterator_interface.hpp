@@ -57,11 +57,21 @@ namespace sl::itr
 			);
 		}
 
-		constexpr void operator ++(int)
-			requires input_iterator_category_tag<iterator_concept>
+		constexpr void operator ++(int) noexcept(noexcept(++cast()))
+			requires !std::copy_constructible<TDerived>
 		{
 			auto& self = cast();
 			++self;
+		}
+
+		[[nodiscard]]
+		constexpr TDerived operator ++(int) noexcept(noexcept(++cast()) && std::is_nothrow_copy_constructible_v<TDerived>)
+			requires std::copy_constructible<TDerived>
+		{
+			auto& self = cast();
+			auto tmp{ self };
+			++self;
+			return tmp;
 		}
 	};
 }
