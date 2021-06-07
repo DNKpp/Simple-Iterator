@@ -57,6 +57,12 @@ namespace sl::itr
 				!input_iterator_category_tag<TIteratorCategory> || input_iterator_suitable<TDerived>,
 				"iterator_interface's template argument TDerived must fulfill all constraints of input_iterator_suitable when using this iterator category."
 			);
+
+			static_assert
+			(
+				!forward_iterator_category_tag<TIteratorCategory> || forward_iterator_suitable<TDerived>,
+				"iterator_interface's template argument TDerived must fulfill all constraints of forward_iterator_suitable when using this iterator category."
+			);
 		}
 
 		constexpr void operator ++(int) noexcept(noexcept(++cast()))

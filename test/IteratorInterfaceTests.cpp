@@ -21,7 +21,7 @@ namespace
 		using difference_type = std::ptrdiff_t;
 
 		TestInputIterator() = default;
-		
+
 		TestInputIterator(const TestInputIterator&) = delete;
 		TestInputIterator& operator =(const TestInputIterator&) = delete;
 		TestInputIterator(TestInputIterator&&) = default;
@@ -40,6 +40,38 @@ namespace
 		}
 
 		constexpr TestInputIterator& operator ++()
+		{
+			++preIncrementCounter;
+			return *this;
+		}
+
+		using super::operator++;
+	};
+
+	struct TestForwardIterator : public iterator_interface<std::forward_iterator_tag, TestForwardIterator>
+	{
+	private:
+		using super = iterator_interface<std::forward_iterator_tag, TestForwardIterator>;
+
+	public:
+		using element_type = int;
+		using difference_type = std::ptrdiff_t;
+
+		bool operator ==(const TestForwardIterator&) const = default;
+
+		int dummyValue = 0;
+
+		mutable int dereferenceCounter_const = 0;
+		mutable int preIncrementCounter = 0;
+
+		[[nodiscard]]
+		constexpr const int& operator *() const
+		{
+			++dereferenceCounter_const;
+			return dummyValue;
+		}
+
+		constexpr TestForwardIterator& operator ++()
 		{
 			++preIncrementCounter;
 			return *this;
@@ -67,7 +99,8 @@ TEMPLATE_TEST_CASE
 (
 	"Using test iterator types, iterator_interface should fulfill std::input_iterator concepts.",
 	"[iterator_interface][input_iterator]",
-	(TestInputIterator)
+	TestInputIterator,
+	TestForwardIterator
 )
 #pragma warning(default: 26444)
 {
@@ -81,4 +114,38 @@ TEMPLATE_TEST_CASE
 	REQUIRE(std::indirectly_readable<Itr_t>);
 
 	REQUIRE(std::input_iterator<Itr_t>);
+}
+
+TEST_CASE
+(
+	"TestForwardIterator iterator_interface should invoke pre-increment operator when post-incrementing and receive a valid copy.",
+	"[iterator_interface][forward_iterator]"
+)
+{
+	TestForwardIterator itr;
+	const auto tmp = itr++;
+
+	REQUIRE(tmp.preIncrementCounter == 0);
+	REQUIRE(itr.preIncrementCounter == 1);
+}
+
+#pragma warning(disable: 26444)
+TEMPLATE_TEST_CASE
+(
+	"Using test iterator types, iterator_interface should fulfill std::forward_iterator concepts.",
+	"[iterator_interface][input_iterator]",
+	(TestForwardIterator)
+)
+#pragma warning(default: 26444)
+{
+	using Itr_t = TestType;
+
+	REQUIRE(std::equality_comparable<Itr_t>);
+	REQUIRE(std::copyable<Itr_t>);
+	REQUIRE(std::semiregular<Itr_t>);
+	REQUIRE(std::regular<Itr_t>);
+
+	REQUIRE(std::sentinel_for<Itr_t, Itr_t>);
+
+	REQUIRE(std::forward_iterator<Itr_t>);
 }
