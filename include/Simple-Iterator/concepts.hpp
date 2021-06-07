@@ -58,6 +58,12 @@ namespace sl::itr
 	};
 
 	template <class T>
+	concept pre_decrementable = requires(T& t)
+	{
+		{ --t } -> std::same_as<T&>;
+	};
+
+	template <class T>
 	concept arrow_dereferencable = requires(T t)
 	{
 		{ t.operator->() } -> pointer_type;
@@ -80,6 +86,10 @@ namespace sl::itr
 	template <class T>
 	concept forward_iterator_suitable = input_iterator_suitable<T> &&
 										std::regular<T>;
+
+	template <class T>
+	concept bidirectional_iterator_suitable = forward_iterator_suitable<T> &&
+											pre_decrementable<T>;
 }
 
 #endif
