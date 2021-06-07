@@ -53,6 +53,12 @@ namespace sl::itr
 	{
 		++t;
 	};
+
+	template <class T>
+	concept input_iterator_suitable = std::default_initializable<T> &&
+									std::movable<T> &&
+									dereferencable<const T> &&
+									pre_incrementable<T>;
 }
 
 #endif

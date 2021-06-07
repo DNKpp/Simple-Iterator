@@ -179,3 +179,18 @@ TEMPLATE_TEST_CASE_SIG
 {
 	REQUIRE(pre_incrementable<T> == VExpected);
 }
+
+#pragma warning(disable: 26444)
+TEMPLATE_TEST_CASE_SIG
+(
+	"input_iterator_suitable concept should detect valid types",
+	"[concept]",
+	((class T, bool VExpected), T, VExpected),
+	(int*, true),
+	(int, false),
+	(void, false)
+)
+#pragma warning(default: 26444)
+{
+	REQUIRE(input_iterator_suitable<T> == VExpected);
+}
