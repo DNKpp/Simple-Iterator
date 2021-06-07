@@ -148,3 +148,19 @@ TEMPLATE_TEST_CASE_SIG
 {
 	REQUIRE(non_void<T> == VExpected);
 }
+
+#pragma warning(disable: 26444)
+TEMPLATE_TEST_CASE_SIG
+(
+	"non_void_dereferencable concept should detect valid types",
+	"[concept]",
+	((class T, bool VExpected), T, VExpected),
+	(int*, true),
+	(int, false),
+	(void*, false),
+	(void, false)
+)
+#pragma warning(default: 26444)
+{
+	REQUIRE(dereferencable<T> == VExpected);
+}

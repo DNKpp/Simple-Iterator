@@ -41,6 +41,12 @@ namespace sl::itr
 
 	template <class T>
 	concept non_void = !std::same_as<T, void>;
+
+	template <class T>
+	concept dereferencable = requires(T& t)
+	{
+		{ *t } -> non_void;
+	};
 }
 
 #endif
