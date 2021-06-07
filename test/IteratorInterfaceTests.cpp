@@ -11,15 +11,21 @@ using namespace sl::itr;
 
 namespace
 {
-	template <class TIteratorTag>
-	struct TestIterator : public iterator_interface<TIteratorTag, TestIterator<TIteratorTag>>
+	struct TestInputIterator : public iterator_interface<std::input_iterator_tag, TestInputIterator>
 	{
 	private:
-		using super = iterator_interface<TIteratorTag, TestIterator<TIteratorTag>>;
+		using super = iterator_interface<std::input_iterator_tag, TestInputIterator>;
 
 	public:
 		using element_type = int;
 		using difference_type = std::ptrdiff_t;
+
+		TestInputIterator() = default;
+		
+		TestInputIterator(const TestInputIterator&) = delete;
+		TestInputIterator& operator =(const TestInputIterator&) = delete;
+		TestInputIterator(TestInputIterator&&) = default;
+		TestInputIterator& operator =(TestInputIterator&&) = default;
 
 		int dummyValue = 0;
 
@@ -33,7 +39,7 @@ namespace
 			return dummyValue;
 		}
 
-		constexpr TestIterator& operator ++()
+		constexpr TestInputIterator& operator ++()
 		{
 			++preIncrementCounter;
 			return *this;
@@ -49,7 +55,7 @@ TEST_CASE
 	"[iterator_interface][input_iterator]"
 )
 {
-	TestIterator<std::input_iterator_tag> itr;
+	TestInputIterator itr;
 	// ReSharper disable once CppDiscardedPostfixOperatorResult
 	itr++;
 
@@ -59,13 +65,13 @@ TEST_CASE
 #pragma warning(disable: 26444)
 TEMPLATE_TEST_CASE
 (
-	"Using TestIterator, iterator_interface should fulfill std::input_iterator concepts.",
+	"Using test iterator types, iterator_interface should fulfill std::input_iterator concepts.",
 	"[iterator_interface][input_iterator]",
-	(std::input_iterator_tag)
+	(TestInputIterator)
 )
 #pragma warning(default: 26444)
 {
-	using Itr_t = TestIterator<TestType>;
+	using Itr_t = TestType;
 
 	REQUIRE(std::default_initializable<Itr_t>);
 	REQUIRE(std::movable<Itr_t>);
