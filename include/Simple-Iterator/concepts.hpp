@@ -47,6 +47,12 @@ namespace sl::itr
 	{
 		{ *t } -> non_void;
 	};
+
+	template <class T>
+	concept pre_incrementable = requires(T& t)
+	{
+		++t;
+	};
 }
 
 #endif

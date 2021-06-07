@@ -152,7 +152,7 @@ TEMPLATE_TEST_CASE_SIG
 #pragma warning(disable: 26444)
 TEMPLATE_TEST_CASE_SIG
 (
-	"non_void_dereferencable concept should detect valid types",
+	"dereferencable concept should detect valid types",
 	"[concept]",
 	((class T, bool VExpected), T, VExpected),
 	(int*, true),
@@ -163,4 +163,19 @@ TEMPLATE_TEST_CASE_SIG
 #pragma warning(default: 26444)
 {
 	REQUIRE(dereferencable<T> == VExpected);
+}
+
+#pragma warning(disable: 26444)
+TEMPLATE_TEST_CASE_SIG
+(
+	"pre_incrementable concept should detect valid types",
+	"[concept]",
+	((class T, bool VExpected), T, VExpected),
+	(int*, true),
+	(int, true),
+	(void, false)
+)
+#pragma warning(default: 26444)
+{
+	REQUIRE(pre_incrementable<T> == VExpected);
 }
