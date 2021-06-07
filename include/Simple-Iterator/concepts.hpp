@@ -51,7 +51,7 @@ namespace sl::itr
 	template <class T>
 	concept pre_incrementable = requires(T& t)
 	{
-		++t;
+		{ ++t } -> std::same_as<T&>;
 	};
 
 	template <class T>
