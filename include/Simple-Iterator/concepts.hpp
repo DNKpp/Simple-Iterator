@@ -43,6 +43,9 @@ namespace sl::itr
 	concept non_void = !std::same_as<T, void>;
 
 	template <class T>
+	concept pointer_type = std::is_pointer_v<T>;
+
+	template <class T>
 	concept dereferencable = requires(T& t)
 	{
 		{ *t } -> non_void;
@@ -52,6 +55,12 @@ namespace sl::itr
 	concept pre_incrementable = requires(T& t)
 	{
 		{ ++t } -> std::same_as<T&>;
+	};
+
+	template <class T>
+	concept arrow_dereferencable = requires(T t)
+	{
+		{ t.operator->() } -> pointer_type;
 	};
 
 	template <class T>

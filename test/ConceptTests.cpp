@@ -5,7 +5,7 @@
 
 #include <catch2/catch.hpp>
 
-#include "Simple-Iterator/Concepts.hpp"
+#include "Simple-Iterator/concepts.hpp"
 
 using namespace sl::itr;
 
@@ -163,6 +163,25 @@ TEMPLATE_TEST_CASE_SIG
 #pragma warning(default: 26444)
 {
 	REQUIRE(dereferencable<T> == VExpected);
+}
+
+#pragma warning(disable: 26444)
+TEMPLATE_TEST_CASE_SIG
+(
+	"arrow_dereferencable concept should detect valid types",
+	"[concept]",
+	((class T, bool VExpected), T, VExpected),
+	(int*, false),
+	(int, false),
+	(void, false),
+	(std::string, false),
+	(std::string&, false),
+	(std::string*, true),
+	(const std::string*, true)
+)
+#pragma warning(default: 26444)
+{
+	REQUIRE(arrow_dereferencable<T> == VExpected);
 }
 
 #pragma warning(disable: 26444)
