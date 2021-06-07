@@ -76,6 +76,10 @@ namespace sl::itr
 									resolvable_difference_type<T> &&
 									dereferencable<const T> &&
 									pre_incrementable<T>;
+
+	template <class T>
+	concept forward_iterator_suitable = input_iterator_suitable<T> &&
+										std::regular<T>;
 }
 
 #endif
