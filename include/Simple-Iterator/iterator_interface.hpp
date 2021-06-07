@@ -82,6 +82,15 @@ namespace sl::itr
 			return tmp;
 		}
 
+		[[nodiscard]]
+		constexpr TDerived operator --(int) noexcept(noexcept(--cast()) && std::is_nothrow_copy_constructible_v<TDerived>)
+		{
+			auto& self = cast();
+			auto tmp{ self };
+			--self;
+			return tmp;
+		}
+
 	protected:
 		constexpr ~iterator_interface() noexcept = default;
 		constexpr iterator_interface(const iterator_interface&) noexcept = default;

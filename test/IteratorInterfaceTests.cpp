@@ -79,6 +79,46 @@ namespace
 
 		using super::operator++;
 	};
+
+	struct TestBidirectionalIterator : public iterator_interface<std::bidirectional_iterator_tag, TestBidirectionalIterator>
+	{
+	private:
+		using super = iterator_interface<std::bidirectional_iterator_tag, TestBidirectionalIterator>;
+
+	public:
+		using element_type = int;
+		using difference_type = std::ptrdiff_t;
+
+		bool operator ==(const TestBidirectionalIterator&) const = default;
+
+		int dummyValue = 0;
+
+		mutable int dereferenceCounter_const = 0;
+		mutable int preIncrementCounter = 0;
+		mutable int preDecrementCounter = 0;
+
+		[[nodiscard]]
+		constexpr const int& operator *() const
+		{
+			++dereferenceCounter_const;
+			return dummyValue;
+		}
+
+		constexpr TestBidirectionalIterator& operator ++()
+		{
+			++preIncrementCounter;
+			return *this;
+		}
+
+		constexpr TestBidirectionalIterator& operator --()
+		{
+			++preDecrementCounter;
+			return *this;
+		}
+
+		using super::operator++;
+		using super::operator--;
+	};
 }
 
 TEST_CASE
@@ -133,8 +173,9 @@ TEST_CASE
 TEMPLATE_TEST_CASE
 (
 	"Using test iterator types, iterator_interface should fulfill std::forward_iterator concepts.",
-	"[iterator_interface][input_iterator]",
-	(TestForwardIterator)
+	"[iterator_interface][forward_iterator]",
+	TestForwardIterator,
+	TestBidirectionalIterator
 )
 #pragma warning(default: 26444)
 {
@@ -148,4 +189,31 @@ TEMPLATE_TEST_CASE
 	REQUIRE(std::sentinel_for<Itr_t, Itr_t>);
 
 	REQUIRE(std::forward_iterator<Itr_t>);
+}
+
+#pragma warning(disable: 26444)
+TEMPLATE_TEST_CASE
+(
+	"Using test iterator types, iterator_interface should fulfill std::bidirectional_iterator concepts.",
+	"[iterator_interface][bidirectional_iterator]",
+	TestBidirectionalIterator
+)
+#pragma warning(default: 26444)
+{
+	using Itr_t = TestType;
+
+	REQUIRE(std::bidirectional_iterator<Itr_t>);
+}
+
+TEST_CASE
+(
+	"TestBidirectionalIterator iterator_interface should invoke pre-decrement operator when post-decrementing and receive a valid copy.",
+	"[iterator_interface][forward_iterator]"
+)
+{
+	TestBidirectionalIterator itr;
+	const auto tmp = itr--;
+
+	REQUIRE(tmp.preDecrementCounter == 0);
+	REQUIRE(itr.preDecrementCounter == 1);
 }
