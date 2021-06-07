@@ -14,7 +14,7 @@ FetchContent_MakeAvailable(catch2)
 add_executable(
 	${PROJECT_NAME}
 	"main.cpp"
-	"IteratorTests.cpp"
+	"IteratorConceptTests.cpp"
 )
 
 target_link_libraries(
