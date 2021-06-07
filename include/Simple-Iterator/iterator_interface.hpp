@@ -48,6 +48,8 @@ namespace sl::itr
 	public:
 		using iterator_concept = TIteratorCategory;
 
+		constexpr auto operator<=>(const iterator_interface&) const noexcept = default;
+
 		constexpr iterator_interface() noexcept
 		{
 			static_assert
@@ -73,6 +75,13 @@ namespace sl::itr
 			++self;
 			return tmp;
 		}
+
+	protected:
+		constexpr ~iterator_interface() noexcept = default;
+		constexpr iterator_interface(const iterator_interface&) noexcept = default;
+		constexpr iterator_interface& operator =(const iterator_interface&) noexcept = default;
+		constexpr iterator_interface(iterator_interface&&) noexcept = default;
+		constexpr iterator_interface& operator =(iterator_interface&&) noexcept = default;
 	};
 }
 
