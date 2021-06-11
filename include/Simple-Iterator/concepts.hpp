@@ -76,9 +76,9 @@ namespace sl::itr
 	};
 
 	template <class T>
-	concept distanceable = requires (T t)
+	concept distanceable = requires(const T t)
 	{
-		{ t - t } -> non_void;
+		{ t.distance(t) } -> std::same_as<std::iter_difference_t<T>>;
 	};
 
 	template <class T>

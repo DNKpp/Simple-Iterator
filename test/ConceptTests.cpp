@@ -5,6 +5,8 @@
 
 #include <catch2/catch.hpp>
 
+#include "TestTypes.hpp"
+
 #include "Simple-Iterator/concepts.hpp"
 
 using namespace sl::itr;
@@ -268,8 +270,7 @@ TEMPLATE_TEST_CASE_SIG
 	"random_access_iterator_suitable concept should detect valid types",
 	"[concept]",
 	((class T, bool VExpected), T, VExpected),
-	(int*, true),
-	(const int*, true),
+	(TestRandomAccessIterator, true),
 	(int, false),
 	(void, false)
 )

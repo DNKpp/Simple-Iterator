@@ -170,6 +170,18 @@ namespace sl::itr
 			return itr;
 		}
 
+		[[nodiscard]]
+		friend constexpr auto operator -
+		(
+			const TDerived& lhs,
+			const TDerived& rhs
+		)
+		noexcept(noexcept(lhs.distance(rhs)))
+			requires requires { lhs.distance(rhs); }
+		{
+			return lhs.distance(rhs);
+		}
+
 	protected:
 		constexpr ~iterator_interface() noexcept = default;
 		constexpr iterator_interface(const iterator_interface&) noexcept = default;
