@@ -189,16 +189,17 @@ TEMPLATE_TEST_CASE_SIG
 #pragma warning(disable: 26444)
 TEMPLATE_TEST_CASE_SIG
 (
-	"pre_incrementable concept should detect valid types",
+	"incrementable concept should detect valid types",
 	"[concept]",
 	((class T, bool VExpected), T, VExpected),
-	(int*, true),
-	(int, true),
-	(void, false)
+	(int*, false),
+	(int, false),
+	(void, false),
+	(TestIncrement, true)
 )
 #pragma warning(default: 26444)
 {
-	REQUIRE(pre_incrementable<T> == VExpected);
+	REQUIRE(incrementable<T> == VExpected);
 }
 
 #pragma warning(disable: 26444)
@@ -223,8 +224,10 @@ TEMPLATE_TEST_CASE_SIG
 	"input_iterator_suitable concept should detect valid types",
 	"[concept]",
 	((class T, bool VExpected), T, VExpected),
-	(int*, true),
-	(const int*, true),
+	(TestInputIterator, true),
+	(TestForwardIterator, true),
+	(TestBidirectionalIterator, true),
+	(TestRandomAccessIterator, true),
 	(int, false),
 	(void, false)
 )
@@ -239,8 +242,9 @@ TEMPLATE_TEST_CASE_SIG
 	"forward_iterator_suitable concept should detect valid types",
 	"[concept]",
 	((class T, bool VExpected), T, VExpected),
-	(int*, true),
-	(const int*, true),
+	(TestForwardIterator, true),
+	(TestBidirectionalIterator, true),
+	(TestRandomAccessIterator, true),
 	(int, false),
 	(void, false)
 )

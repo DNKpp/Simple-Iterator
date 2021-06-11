@@ -77,20 +77,27 @@ namespace sl::itr
 			);
 		}
 
-		constexpr void operator ++(int) noexcept(noexcept(++cast()))
-			requires (!std::copy_constructible<TDerived>)
+		[[nodiscard]]
+		constexpr TDerived& operator ++() noexcept(noexcept(cast().increment()))
 		{
 			auto& self = cast();
-			++self;
+			self.increment();
+			return self;
+		}
+
+		constexpr void operator ++(int) noexcept(noexcept(cast().increment()))
+			requires (!std::copy_constructible<TDerived>)
+		{
+			cast().increment();
 		}
 
 		[[nodiscard]]
-		constexpr TDerived operator ++(int) noexcept(noexcept(++cast()) && std::is_nothrow_copy_constructible_v<TDerived>)
+		constexpr TDerived operator ++(int) noexcept(noexcept(cast().increment()) && std::is_nothrow_copy_constructible_v<TDerived>)
 			requires std::copy_constructible<TDerived>
 		{
 			auto& self = cast();
 			auto tmp{ self };
-			++self;
+			self.increment();
 			return tmp;
 		}
 

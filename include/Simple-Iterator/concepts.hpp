@@ -52,9 +52,9 @@ namespace sl::itr
 	};
 
 	template <class T>
-	concept pre_incrementable = requires(T& t)
+	concept incrementable = requires(T t)
 	{
-		{ ++t } -> std::same_as<T&>;
+		t.increment();
 	};
 
 	template <class T>
@@ -93,7 +93,7 @@ namespace sl::itr
 									resolvable_value_type<T> &&
 									resolvable_difference_type<T> &&
 									dereferencable<const T> &&
-									pre_incrementable<T>;
+									incrementable<T>;
 
 	template <class T>
 	concept forward_iterator_suitable = input_iterator_suitable<T> &&

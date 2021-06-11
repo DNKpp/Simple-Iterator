@@ -21,7 +21,7 @@ TEST_CASE
 	// ReSharper disable once CppDiscardedPostfixOperatorResult
 	itr++;
 
-	REQUIRE(itr.preIncrementCounter == 1);
+	REQUIRE(itr.incrementCounter == 1);
 }
 
 #pragma warning(disable: 26444)
@@ -57,8 +57,8 @@ TEST_CASE
 	TestForwardIterator itr;
 	const auto tmp = itr++;
 
-	REQUIRE(tmp.preIncrementCounter == 0);
-	REQUIRE(itr.preIncrementCounter == 1);
+	REQUIRE(tmp.incrementCounter == 0);
+	REQUIRE(itr.incrementCounter == 1);
 }
 
 #pragma warning(disable: 26444)

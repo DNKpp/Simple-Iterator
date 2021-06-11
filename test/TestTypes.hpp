@@ -31,7 +31,7 @@ namespace sl::itr
 		int dummyValue = 0;
 
 		mutable int dereferenceCounter_const = 0;
-		mutable int preIncrementCounter = 0;
+		int incrementCounter = 0;
 
 		[[nodiscard]]
 		constexpr const int& operator *() const
@@ -40,13 +40,10 @@ namespace sl::itr
 			return dummyValue;
 		}
 
-		constexpr TestInputIterator& operator ++()
+		constexpr void increment()
 		{
-			++preIncrementCounter;
-			return *this;
+			++incrementCounter;
 		}
-
-		using super::operator++;
 	};
 
 	struct TestForwardIterator : public iterator_interface<std::forward_iterator_tag, TestForwardIterator>
@@ -63,7 +60,7 @@ namespace sl::itr
 		int dummyValue = 0;
 
 		mutable int dereferenceCounter_const = 0;
-		mutable int preIncrementCounter = 0;
+		int incrementCounter = 0;
 
 		[[nodiscard]]
 		constexpr const int& operator *() const
@@ -72,13 +69,10 @@ namespace sl::itr
 			return dummyValue;
 		}
 
-		constexpr TestForwardIterator& operator ++()
+		constexpr void increment()
 		{
-			++preIncrementCounter;
-			return *this;
+			++incrementCounter;
 		}
-
-		using super::operator++;
 	};
 
 	struct TestBidirectionalIterator : public iterator_interface<std::bidirectional_iterator_tag, TestBidirectionalIterator>
@@ -95,7 +89,7 @@ namespace sl::itr
 		int dummyValue = 0;
 
 		mutable int dereferenceCounter_const = 0;
-		mutable int preIncrementCounter = 0;
+		int incrementCounter = 0;
 		int decrementCounter = 0;
 
 		[[nodiscard]]
@@ -105,18 +99,15 @@ namespace sl::itr
 			return dummyValue;
 		}
 
-		constexpr TestBidirectionalIterator& operator ++()
+		constexpr void increment()
 		{
-			++preIncrementCounter;
-			return *this;
+			++incrementCounter;
 		}
 
 		constexpr void decrement()
 		{
 			++decrementCounter;
 		}
-
-		using super::operator++;
 	};
 
 	struct TestRandomAccessIterator : public iterator_interface<std::random_access_iterator_tag, TestRandomAccessIterator>
@@ -133,7 +124,7 @@ namespace sl::itr
 		int dummyValue = 0;
 
 		mutable int dereferenceCounter_const = 0;
-		mutable int preIncrementCounter = 0;
+		int incrementCounter = 0;
 		int decrementCounter = 0;
 		int advanceCounter = 0;
 		mutable int distanceCounter = 0;
@@ -145,10 +136,9 @@ namespace sl::itr
 			return dummyValue;
 		}
 
-		constexpr TestRandomAccessIterator& operator ++()
+		constexpr void increment()
 		{
-			++preIncrementCounter;
-			return *this;
+			++incrementCounter;
 		}
 
 		constexpr void decrement()
@@ -167,8 +157,13 @@ namespace sl::itr
 			++distanceCounter;
 			return 0;
 		}
+	};
 
-		using super::operator++;
+	struct TestIncrement
+	{
+		void increment()
+		{
+		}
 	};
 
 	struct TestDecrement
