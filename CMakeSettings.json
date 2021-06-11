@@ -133,9 +133,14 @@
 			"inheritEnvironments": [ "clang_cl_x64_x64" ],
 			"variables": [
 				{
-					"name": "CMAKE_C_COMPILER",
-					"value": "C:/PROGRAM FILES (X86)/MICROSOFT VISUAL STUDIO/2019/COMMUNITY/VC/Tools/Llvm/x64/bin/clang-cl.exe",
+					"name": "CMAKE_CXX_COMPILER",
+					"value": "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/VC/Tools/Llvm/x64/bin/clang-cl.exe",
 					"type": "STRING"
+				},
+				{
+					"name": "CMAKE_C_COMPILER",
+					"value": "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/VC/Tools/Llvm/x64/bin/clang-cl.exe",
+					"type": "FILEPATH"
 				}
 			]
 		},
@@ -148,7 +153,19 @@
 			"cmakeCommandArgs": "",
 			"buildCommandArgs": "",
 			"ctestCommandArgs": "",
-			"inheritEnvironments": [ "clang_cl_x64_x64" ]
+			"inheritEnvironments": [ "clang_cl_x64_x64" ],
+			"variables": [
+				{
+					"name": "CMAKE_CXX_COMPILER",
+					"value": "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/VC/Tools/Llvm/x64/bin/clang-cl.exe",
+					"type": "STRING"
+				},
+				{
+					"name": "CMAKE_C_COMPILER",
+					"value": "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/VC/Tools/Llvm/x64/bin/clang-cl.exe",
+					"type": "FILEPATH"
+				}
+			]
 		},
 		{
 			"name": "x64-ReleaseWithDebInfo",
