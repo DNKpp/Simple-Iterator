@@ -58,9 +58,9 @@ namespace sl::itr
 	};
 
 	template <class T>
-	concept pre_decrementable = requires(T& t)
+	concept decrementable = requires(T& t)
 	{
-		{ --t } -> std::same_as<T&>;
+		t.decrement();
 	};
 
 	template <class T>
@@ -101,7 +101,7 @@ namespace sl::itr
 
 	template <class T>
 	concept bidirectional_iterator_suitable = forward_iterator_suitable<T> &&
-											pre_decrementable<T>;
+											decrementable<T>;
 
 	template <class T>
 	concept random_access_iterator_suitable = bidirectional_iterator_suitable<T> &&

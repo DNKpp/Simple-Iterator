@@ -108,8 +108,8 @@ TEST_CASE
 	TestBidirectionalIterator itr;
 	const auto tmp = itr--;
 
-	REQUIRE(tmp.preDecrementCounter == 0);
-	REQUIRE(itr.preDecrementCounter == 1);
+	REQUIRE(tmp.decrementCounter == 0);
+	REQUIRE(itr.decrementCounter == 1);
 }
 
 TEST_CASE

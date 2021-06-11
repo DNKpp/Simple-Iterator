@@ -204,16 +204,17 @@ TEMPLATE_TEST_CASE_SIG
 #pragma warning(disable: 26444)
 TEMPLATE_TEST_CASE_SIG
 (
-	"pre_decrementable concept should detect valid types",
+	"decrementable concept should detect valid types",
 	"[concept]",
 	((class T, bool VExpected), T, VExpected),
-	(int*, true),
-	(int, true),
-	(void, false)
+	(int*, false),
+	(int, false),
+	(void, false),
+	(TestDecrement, true)
 )
 #pragma warning(default: 26444)
 {
-	REQUIRE(pre_decrementable<T> == VExpected);
+	REQUIRE(decrementable<T> == VExpected);
 }
 
 #pragma warning(disable: 26444)
@@ -254,8 +255,8 @@ TEMPLATE_TEST_CASE_SIG
 	"bidirectional_iterator_suitable concept should detect valid types",
 	"[concept]",
 	((class T, bool VExpected), T, VExpected),
-	(int*, true),
-	(const int*, true),
+	(TestBidirectionalIterator, true),
+	(TestRandomAccessIterator, true),
 	(int, false),
 	(void, false)
 )

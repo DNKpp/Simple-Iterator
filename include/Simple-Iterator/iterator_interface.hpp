@@ -95,12 +95,21 @@ namespace sl::itr
 		}
 
 		[[nodiscard]]
-		constexpr TDerived operator --(int) noexcept(noexcept(--cast()) && std::is_nothrow_copy_constructible_v<TDerived>)
-			requires (bidirectional_iterator_category_tag<TIteratorCategory> || pre_decrementable<TDerived>)
+		constexpr TDerived& operator --() noexcept(noexcept(cast().decrement()))
+			requires decrementable<TDerived>
+		{
+			auto& self = cast();
+			self.decrement();
+			return self;
+		}
+
+		[[nodiscard]]
+		constexpr TDerived operator --(int) noexcept(noexcept(cast().decrement()) && std::is_nothrow_copy_constructible_v<TDerived>)
+			requires decrementable<TDerived>
 		{
 			auto& self = cast();
 			auto tmp{ self };
-			--self;
+			self.decrement();
 			return tmp;
 		}
 

@@ -96,7 +96,7 @@ namespace sl::itr
 
 		mutable int dereferenceCounter_const = 0;
 		mutable int preIncrementCounter = 0;
-		mutable int preDecrementCounter = 0;
+		int decrementCounter = 0;
 
 		[[nodiscard]]
 		constexpr const int& operator *() const
@@ -111,14 +111,12 @@ namespace sl::itr
 			return *this;
 		}
 
-		constexpr TestBidirectionalIterator& operator --()
+		constexpr void decrement()
 		{
-			++preDecrementCounter;
-			return *this;
+			++decrementCounter;
 		}
 
 		using super::operator++;
-		using super::operator--;
 	};
 
 	struct TestRandomAccessIterator : public iterator_interface<std::random_access_iterator_tag, TestRandomAccessIterator>
@@ -136,7 +134,7 @@ namespace sl::itr
 
 		mutable int dereferenceCounter_const = 0;
 		mutable int preIncrementCounter = 0;
-		mutable int preDecrementCounter = 0;
+		int decrementCounter = 0;
 		int advanceCounter = 0;
 		mutable int distanceCounter = 0;
 
@@ -153,10 +151,9 @@ namespace sl::itr
 			return *this;
 		}
 
-		constexpr TestRandomAccessIterator& operator --()
+		constexpr void decrement()
 		{
-			++preDecrementCounter;
-			return *this;
+			++decrementCounter;
 		}
 
 		constexpr void advance(std::ptrdiff_t diff)
@@ -172,7 +169,13 @@ namespace sl::itr
 		}
 
 		using super::operator++;
-		using super::operator--;
+	};
+
+	struct TestDecrement
+	{
+		void decrement()
+		{
+		}
 	};
 }
 
