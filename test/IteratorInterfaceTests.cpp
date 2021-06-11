@@ -119,6 +119,53 @@ namespace
 		using super::operator++;
 		using super::operator--;
 	};
+
+	struct TestRandomAccesslIterator : public iterator_interface<std::bidirectional_iterator_tag, TestRandomAccesslIterator>
+	{
+	private:
+		using super = iterator_interface<std::bidirectional_iterator_tag, TestRandomAccesslIterator>;
+
+	public:
+		using element_type = int;
+		using difference_type = std::ptrdiff_t;
+
+		bool operator ==(const TestRandomAccesslIterator&) const = default;
+
+		int dummyValue = 0;
+
+		mutable int dereferenceCounter_const = 0;
+		mutable int preIncrementCounter = 0;
+		mutable int preDecrementCounter = 0;
+		mutable int advanceCounter = 0;
+
+		[[nodiscard]]
+		constexpr const int& operator *() const
+		{
+			++dereferenceCounter_const;
+			return dummyValue;
+		}
+
+		constexpr TestRandomAccesslIterator& operator ++()
+		{
+			++preIncrementCounter;
+			return *this;
+		}
+
+		constexpr TestRandomAccesslIterator& operator --()
+		{
+			++preDecrementCounter;
+			return *this;
+		}
+
+		constexpr TestRandomAccesslIterator& operator +=(std::ptrdiff_t diff)
+		{
+			++advanceCounter;
+			return *this;
+		}
+
+		using super::operator++;
+		using super::operator--;
+	};
 }
 
 TEST_CASE
@@ -140,7 +187,9 @@ TEMPLATE_TEST_CASE
 	"Using test iterator types, iterator_interface should fulfill std::input_iterator concepts.",
 	"[iterator_interface][input_iterator]",
 	TestInputIterator,
-	TestForwardIterator
+	TestForwardIterator,
+	TestBidirectionalIterator,
+	TestRandomAccesslIterator
 )
 #pragma warning(default: 26444)
 {
@@ -175,7 +224,8 @@ TEMPLATE_TEST_CASE
 	"Using test iterator types, iterator_interface should fulfill std::forward_iterator concepts.",
 	"[iterator_interface][forward_iterator]",
 	TestForwardIterator,
-	TestBidirectionalIterator
+	TestBidirectionalIterator,
+	TestRandomAccesslIterator
 )
 #pragma warning(default: 26444)
 {
@@ -196,7 +246,8 @@ TEMPLATE_TEST_CASE
 (
 	"Using test iterator types, iterator_interface should fulfill std::bidirectional_iterator concepts.",
 	"[iterator_interface][bidirectional_iterator]",
-	TestBidirectionalIterator
+	TestBidirectionalIterator,
+	TestRandomAccesslIterator
 )
 #pragma warning(default: 26444)
 {
@@ -216,4 +267,58 @@ TEST_CASE
 
 	REQUIRE(tmp.preDecrementCounter == 0);
 	REQUIRE(itr.preDecrementCounter == 1);
+}
+
+TEST_CASE
+(
+	"TestRandomAccesslIterator iterator_interface should invoke operator += when using random access operations.",
+	"[iterator_interface][forward_iterator]"
+)
+{
+	TestRandomAccesslIterator itr;
+
+	SECTION("operator +=")
+	{
+		itr += 1;
+		
+		REQUIRE(itr.advanceCounter == 1);
+	}
+
+	SECTION("operator +")
+	{
+		const auto secItr = itr + 1;
+		
+		REQUIRE(itr.advanceCounter == 0);
+		REQUIRE(secItr.advanceCounter == 1);
+	}
+
+	SECTION("commutative operator +")
+	{
+		const auto secItr = 1 + itr;
+		
+		REQUIRE(itr.advanceCounter == 0);
+		REQUIRE(secItr.advanceCounter == 1);
+	}
+
+	SECTION("operator -=")
+	{
+		itr -= 1;
+		
+		REQUIRE(itr.advanceCounter == 1);
+	}
+
+	SECTION("operator -")
+	{
+		const auto secItr = itr - 1;
+		
+		REQUIRE(itr.advanceCounter == 0);
+		REQUIRE(secItr.advanceCounter == 1);
+	}
+
+	SECTION("operator []")
+	{
+		const auto val = itr[1];
+		
+		REQUIRE(itr.advanceCounter == 0);
+	}
 }

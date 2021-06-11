@@ -97,6 +97,67 @@ namespace sl::itr
 			return tmp;
 		}
 
+		template <class TDifference>
+		constexpr decltype(auto) operator []
+		(
+			TDifference&& value
+		) noexcept
+		(
+			std::is_nothrow_copy_constructible_v<TDerived> &&
+			noexcept(cast() += std::forward<TDifference>(value)) &&
+			noexcept(*cast())
+		)
+		{
+			auto tmp{ cast() };
+			tmp += std::forward<TDifference>(value);
+			return *tmp;
+		}
+
+		template <class TDifference>
+		constexpr TDerived& operator -=(TDifference&& value) noexcept(noexcept(cast() += std::forward<TDifference>(value)))
+		{
+			value *= -1;
+			auto& self = cast();
+			self += std::forward<TDifference>(value);
+			return self;
+		}
+
+		template <class TDifference>
+		[[nodiscard]]
+		friend constexpr TDerived operator +
+		(
+			TDerived itr,
+			TDifference&& value
+		) noexcept(noexcept(itr += std::forward<TDifference>(value)))
+		{
+			itr += std::forward<TDifference>(value);
+			return itr;
+		}
+
+		template <class TDifference>
+		[[nodiscard]]
+		friend constexpr TDerived operator +
+		(
+			TDifference&& value,
+			TDerived itr
+		) noexcept(noexcept(itr += std::forward<TDifference>(value)))
+		{
+			itr += std::forward<TDifference>(value);
+			return itr;
+		}
+
+		template <class TDifference>
+		[[nodiscard]]
+		friend constexpr TDerived operator -
+		(
+			TDerived itr,
+			TDifference&& value
+		) noexcept(noexcept(itr -= std::forward<TDifference>(value)))
+		{
+			itr -= std::forward<TDifference>(value);
+			return itr;
+		}
+
 	protected:
 		constexpr ~iterator_interface() noexcept = default;
 		constexpr iterator_interface(const iterator_interface&) noexcept = default;
