@@ -42,7 +42,7 @@ namespace sl::itr
 				std::derived_from<TDerived, iterator_interface>,
 				"iterator_interface's template argument TDerived must derive from iterator_interface."
 			);
-			return static_cast<TDerived&>(*this);
+			return static_cast<const TDerived&>(*this);
 		}
 
 	public:
@@ -108,10 +108,10 @@ namespace sl::itr
 		constexpr decltype(auto) operator []
 		(
 			TDifference&& value
-		) noexcept
+		) const noexcept
 		(
 			std::is_nothrow_copy_constructible_v<TDerived> &&
-			noexcept(cast() += std::forward<TDifference>(value)) &&
+			noexcept(std::declval<TDerived>() += std::forward<TDifference>(value)) &&
 			noexcept(*cast())
 		)
 			requires (random_access_iterator_category_tag<TIteratorCategory> || advanceable_with<TDerived, TDifference>)
@@ -123,7 +123,7 @@ namespace sl::itr
 
 		template <class TDifference>
 		constexpr TDerived& operator -=(TDifference&& value) noexcept(noexcept(cast() += std::forward<TDifference>(value)))
-			requires (random_access_iterator_category_tag<TIteratorCategory> || advanceable_with<TDerived, TDifference>)
+			requires advanceable_with<TDerived, TDifference>
 		{
 			value *= -1;
 			auto& self = cast();
@@ -138,7 +138,7 @@ namespace sl::itr
 			TDerived itr,
 			TDifference&& value
 		) noexcept(noexcept(itr += std::forward<TDifference>(value)))
-			requires (random_access_iterator_category_tag<TIteratorCategory> || advanceable_with<TDerived, TDifference>)
+			requires advanceable_with<TDerived, TDifference>
 		{
 			itr += std::forward<TDifference>(value);
 			return itr;
@@ -151,7 +151,7 @@ namespace sl::itr
 			TDifference&& value,
 			TDerived itr
 		) noexcept(noexcept(itr += std::forward<TDifference>(value)))
-			requires (random_access_iterator_category_tag<TIteratorCategory> || advanceable_with<TDerived, TDifference>)
+			requires advanceable_with<TDerived, TDifference>
 		{
 			itr += std::forward<TDifference>(value);
 			return itr;
@@ -164,7 +164,7 @@ namespace sl::itr
 			TDerived itr,
 			TDifference&& value
 		) noexcept(noexcept(itr -= std::forward<TDifference>(value)))
-			requires (random_access_iterator_category_tag<TIteratorCategory> || advanceable_with<TDerived, TDifference>)
+			requires advanceable_with<TDerived, TDifference>
 		{
 			itr -= std::forward<TDifference>(value);
 			return itr;

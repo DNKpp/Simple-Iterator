@@ -129,7 +129,7 @@ namespace
 		using element_type = int;
 		using difference_type = std::ptrdiff_t;
 
-		bool operator ==(const TestRandomAccessIterator&) const = default;
+		auto operator <=>(const TestRandomAccessIterator&) const = default;
 
 		int dummyValue = 0;
 
@@ -137,6 +137,7 @@ namespace
 		mutable int preIncrementCounter = 0;
 		mutable int preDecrementCounter = 0;
 		mutable int advanceCounter = 0;
+		mutable int distanceCounter = 0;
 
 		[[nodiscard]]
 		constexpr const int& operator *() const
@@ -161,6 +162,13 @@ namespace
 		{
 			++advanceCounter;
 			return *this;
+		}
+
+		[[nodiscard]]
+		constexpr std::ptrdiff_t operator -(const TestRandomAccessIterator& rhs) const
+		{
+			++distanceCounter;
+			return 0;
 		}
 
 		using super::operator++;
@@ -315,10 +323,34 @@ TEST_CASE
 		REQUIRE(secItr.advanceCounter == 1);
 	}
 
+	SECTION("operator - with iterator")
+	{
+		const auto diff = itr - itr;
+
+		REQUIRE(itr.distanceCounter == 1);
+	}
+
 	SECTION("operator []")
 	{
 		const auto val = itr[1];
 
 		REQUIRE(itr.advanceCounter == 0);
 	}
+}
+
+#pragma warning(disable: 26444)
+TEMPLATE_TEST_CASE
+(
+	"Using test iterator types, iterator_interface should fulfill std::random_access_iterator concepts.",
+	"[iterator_interface][random_access_iterator]",
+	TestRandomAccessIterator
+)
+#pragma warning(default: 26444)
+{
+	using Itr_t = TestType;
+
+	REQUIRE(std::totally_ordered<Itr_t>);
+	REQUIRE(std::sized_sentinel_for<Itr_t, Itr_t>);
+
+	REQUIRE(std::random_access_iterator<Itr_t>);
 }

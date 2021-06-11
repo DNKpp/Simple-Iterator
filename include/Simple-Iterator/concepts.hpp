@@ -76,6 +76,12 @@ namespace sl::itr
 	};
 
 	template <class T>
+	concept distanceable = requires (T t)
+	{
+		{ t - t } -> non_void;
+	};
+
+	template <class T>
 	concept resolvable_value_type = requires { typename std::iter_value_t<T>; };
 
 	template <class T>
@@ -99,7 +105,8 @@ namespace sl::itr
 
 	template <class T>
 	concept random_access_iterator_suitable = bidirectional_iterator_suitable<T> &&
-											advanceable_with<T, std::iter_difference_t<T>>;
+											advanceable_with<T, std::iter_difference_t<T>> &&
+											distanceable<T>;
 }
 
 #endif
