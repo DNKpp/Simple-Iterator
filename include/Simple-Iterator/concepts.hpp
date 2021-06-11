@@ -69,6 +69,12 @@ namespace sl::itr
 		{ t.operator->() } -> pointer_type;
 	};
 
+	template <class T, class TDifferenceType>
+	concept advanceable = requires(T& t, TDifferenceType diff)
+	{
+		{ t += diff } -> std::same_as<T&>;
+	};
+
 	template <class T>
 	concept resolvable_value_type = requires { typename std::iter_value_t<T>; };
 
@@ -90,6 +96,10 @@ namespace sl::itr
 	template <class T>
 	concept bidirectional_iterator_suitable = forward_iterator_suitable<T> &&
 											pre_decrementable<T>;
+
+	template <class T>
+	concept random_access_iterator_suitable = bidirectional_iterator_suitable<T> &&
+											advanceable<T, std::iter_difference_t<T>>;
 }
 
 #endif
