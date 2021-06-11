@@ -69,6 +69,12 @@ namespace sl::itr
 				!bidirectional_iterator_category_tag<TIteratorCategory> || bidirectional_iterator_suitable<TDerived>,
 				"iterator_interface's template argument TDerived must fulfill all constraints of bidirectional_iterator_suitable when using this iterator category."
 			);
+
+			static_assert
+			(
+				!random_access_iterator_category_tag<TIteratorCategory> || random_access_iterator_suitable<TDerived>,
+				"iterator_interface's template argument TDerived must fulfill all constraints of random_access_iterator_suitable when using this iterator category."
+			);
 		}
 
 		constexpr void operator ++(int) noexcept(noexcept(++cast()))
