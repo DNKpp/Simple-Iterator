@@ -3,6 +3,9 @@
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          https://www.boost.org/LICENSE_1_0.txt)
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "cert-err58-cpp"
+
 #include <catch2/catch.hpp>
 
 #include "Simple-Iterator/concepts.hpp"
@@ -259,5 +262,7 @@ TEMPLATE_TEST_CASE_SIG
 )
 #pragma warning(default: 26444)
 {
-	REQUIRE(forward_iterator_suitable<T> == VExpected);
+	REQUIRE(bidirectional_iterator_suitable<T> == VExpected);
 }
+
+#pragma clang diagnostic pop
