@@ -137,7 +137,7 @@ namespace sl::itr
 		mutable int dereferenceCounter_const = 0;
 		mutable int preIncrementCounter = 0;
 		mutable int preDecrementCounter = 0;
-		mutable int advanceCounter = 0;
+		int advanceCounter = 0;
 		mutable int distanceCounter = 0;
 
 		[[nodiscard]]
@@ -159,10 +159,9 @@ namespace sl::itr
 			return *this;
 		}
 
-		constexpr TestRandomAccessIterator& operator +=(std::ptrdiff_t diff)
+		constexpr void advance(std::ptrdiff_t diff)
 		{
 			++advanceCounter;
-			return *this;
 		}
 
 		[[nodiscard]]

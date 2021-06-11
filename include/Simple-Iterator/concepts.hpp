@@ -70,9 +70,9 @@ namespace sl::itr
 	};
 
 	template <class T, class TDifferenceType>
-	concept advanceable_with = requires(T& t, TDifferenceType diff)
+	concept advanceable_with = requires(T t, const TDifferenceType diff)
 	{
-		{ t += diff } -> std::same_as<T&>;
+		t.advance(diff);
 	};
 
 	template <class T>

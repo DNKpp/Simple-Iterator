@@ -111,14 +111,23 @@ namespace sl::itr
 		) const noexcept
 		(
 			std::is_nothrow_copy_constructible_v<TDerived> &&
-			noexcept(std::declval<TDerived>() += std::forward<TDifference>(value)) &&
+			noexcept(std::declval<TDerived>().advance(std::forward<TDifference>(value))) &&
 			noexcept(*cast())
 		)
 			requires (random_access_iterator_category_tag<TIteratorCategory> || advanceable_with<TDerived, TDifference>)
 		{
 			auto tmp{ cast() };
-			tmp += std::forward<TDifference>(value);
+			tmp.advance(std::forward<TDifference>(value));
 			return *tmp;
+		}
+
+		template <class TDifference>
+		constexpr TDerived& operator +=(TDifference&& value) noexcept(noexcept(cast().advance(std::forward<TDifference>(value))))
+			requires advanceable_with<TDerived, TDifference>
+		{
+			auto& self = cast();
+			self.advance(std::forward<TDifference>(value));
+			return self;
 		}
 
 		template <class TDifference>
@@ -127,7 +136,7 @@ namespace sl::itr
 		{
 			value *= -1;
 			auto& self = cast();
-			self += std::forward<TDifference>(value);
+			self.advance(std::forward<TDifference>(value));
 			return self;
 		}
 
