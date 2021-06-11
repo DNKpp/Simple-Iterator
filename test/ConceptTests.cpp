@@ -3,9 +3,6 @@
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          https://www.boost.org/LICENSE_1_0.txt)
 
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "cert-err58-cpp"
-
 #include <catch2/catch.hpp>
 
 #include "Simple-Iterator/concepts.hpp"
@@ -168,24 +165,24 @@ TEMPLATE_TEST_CASE_SIG
 	REQUIRE(dereferencable<T> == VExpected);
 }
 
-#pragma warning(disable: 26444)
-TEMPLATE_TEST_CASE_SIG
-(
-	"arrow_dereferencable concept should detect valid types",
-	"[concept]",
-	((class T, bool VExpected), T, VExpected),
-	(int*, false),
-	(int, false),
-	(void, false),
-	(std::string, false),
-	(std::string&, false),
-	(std::string*, true),
-	(const std::string*, true)
-)
-#pragma warning(default: 26444)
-{
-	REQUIRE(arrow_dereferencable<T> == VExpected);
-}
+//#pragma warning(disable: 26444)
+//TEMPLATE_TEST_CASE_SIG
+//(
+//	"arrow_dereferencable concept should detect valid types",
+//	"[concept]",
+//	((class T, bool VExpected), T, VExpected),
+//	(int*, false),
+//	(int, false),
+//	(void, false),
+//	(std::string, false),
+//	(std::string&, false),
+//	(std::string*, true),
+//	(const std::string*, true)
+//)
+//#pragma warning(default: 26444)
+//{
+//	REQUIRE(arrow_dereferencable<T> == VExpected);
+//}
 
 #pragma warning(disable: 26444)
 TEMPLATE_TEST_CASE_SIG
@@ -264,5 +261,3 @@ TEMPLATE_TEST_CASE_SIG
 {
 	REQUIRE(bidirectional_iterator_suitable<T> == VExpected);
 }
-
-#pragma clang diagnostic pop
