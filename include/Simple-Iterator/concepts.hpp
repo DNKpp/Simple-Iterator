@@ -70,7 +70,7 @@ namespace sl::itr
 	};
 
 	template <class T, class TDifferenceType>
-	concept advanceable = requires(T& t, TDifferenceType diff)
+	concept advanceable_with = requires(T& t, TDifferenceType diff)
 	{
 		{ t += diff } -> std::same_as<T&>;
 	};
@@ -99,7 +99,7 @@ namespace sl::itr
 
 	template <class T>
 	concept random_access_iterator_suitable = bidirectional_iterator_suitable<T> &&
-											advanceable<T, std::iter_difference_t<T>>;
+											advanceable_with<T, std::iter_difference_t<T>>;
 }
 
 #endif

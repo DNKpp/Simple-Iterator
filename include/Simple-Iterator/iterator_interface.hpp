@@ -114,7 +114,7 @@ namespace sl::itr
 			noexcept(cast() += std::forward<TDifference>(value)) &&
 			noexcept(*cast())
 		)
-			requires (random_access_iterator_category_tag<TIteratorCategory> || advanceable<TDerived>)
+			requires (random_access_iterator_category_tag<TIteratorCategory> || advanceable_with<TDerived, TDifference>)
 		{
 			auto tmp{ cast() };
 			tmp += std::forward<TDifference>(value);
@@ -123,7 +123,7 @@ namespace sl::itr
 
 		template <class TDifference>
 		constexpr TDerived& operator -=(TDifference&& value) noexcept(noexcept(cast() += std::forward<TDifference>(value)))
-			requires (random_access_iterator_category_tag<TIteratorCategory> || advanceable<TDerived>)
+			requires (random_access_iterator_category_tag<TIteratorCategory> || advanceable_with<TDerived, TDifference>)
 		{
 			value *= -1;
 			auto& self = cast();
@@ -138,7 +138,7 @@ namespace sl::itr
 			TDerived itr,
 			TDifference&& value
 		) noexcept(noexcept(itr += std::forward<TDifference>(value)))
-			requires (random_access_iterator_category_tag<TIteratorCategory> || advanceable<TDerived>)
+			requires (random_access_iterator_category_tag<TIteratorCategory> || advanceable_with<TDerived, TDifference>)
 		{
 			itr += std::forward<TDifference>(value);
 			return itr;
@@ -151,7 +151,7 @@ namespace sl::itr
 			TDifference&& value,
 			TDerived itr
 		) noexcept(noexcept(itr += std::forward<TDifference>(value)))
-			requires (random_access_iterator_category_tag<TIteratorCategory> || advanceable<TDerived>)
+			requires (random_access_iterator_category_tag<TIteratorCategory> || advanceable_with<TDerived, TDifference>)
 		{
 			itr += std::forward<TDifference>(value);
 			return itr;
@@ -164,7 +164,7 @@ namespace sl::itr
 			TDerived itr,
 			TDifference&& value
 		) noexcept(noexcept(itr -= std::forward<TDifference>(value)))
-			requires (random_access_iterator_category_tag<TIteratorCategory> || advanceable<TDerived>)
+			requires (random_access_iterator_category_tag<TIteratorCategory> || advanceable_with<TDerived, TDifference>)
 		{
 			itr -= std::forward<TDifference>(value);
 			return itr;
