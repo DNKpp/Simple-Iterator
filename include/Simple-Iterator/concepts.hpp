@@ -48,7 +48,7 @@ namespace sl::itr
 	template <class T>
 	concept dereferencable = requires(T& t)
 	{
-		{ *t } -> non_void;
+		{ t.get() } -> non_void;
 	};
 
 	template <class T>
@@ -61,12 +61,6 @@ namespace sl::itr
 	concept decrementable = requires(T& t)
 	{
 		t.decrement();
-	};
-
-	template <class T>
-	concept arrow_dereferencable = requires(T t)
-	{
-		{ t.operator->() } -> pointer_type;
 	};
 
 	template <class T, class TDifferenceType>

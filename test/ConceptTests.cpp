@@ -157,7 +157,11 @@ TEMPLATE_TEST_CASE_SIG
 	"dereferencable concept should detect valid types",
 	"[concept]",
 	((class T, bool VExpected), T, VExpected),
-	(int*, true),
+	(TestInputIterator, true),
+	(TestForwardIterator, true),
+	(TestBidirectionalIterator, true),
+	(TestRandomAccessIterator, true),
+	(int*, false),
 	(int, false),
 	(void*, false),
 	(void, false)
@@ -166,25 +170,6 @@ TEMPLATE_TEST_CASE_SIG
 {
 	REQUIRE(dereferencable<T> == VExpected);
 }
-
-//#pragma warning(disable: 26444)
-//TEMPLATE_TEST_CASE_SIG
-//(
-//	"arrow_dereferencable concept should detect valid types",
-//	"[concept]",
-//	((class T, bool VExpected), T, VExpected),
-//	(int*, false),
-//	(int, false),
-//	(void, false),
-//	(std::string, false),
-//	(std::string&, false),
-//	(std::string*, true),
-//	(const std::string*, true)
-//)
-//#pragma warning(default: 26444)
-//{
-//	REQUIRE(arrow_dereferencable<T> == VExpected);
-//}
 
 #pragma warning(disable: 26444)
 TEMPLATE_TEST_CASE_SIG

@@ -34,7 +34,7 @@ namespace sl::itr
 		int incrementCounter = 0;
 
 		[[nodiscard]]
-		constexpr const int& operator *() const
+		constexpr const int& get() const
 		{
 			++dereferenceCounter_const;
 			return dummyValue;
@@ -63,7 +63,7 @@ namespace sl::itr
 		int incrementCounter = 0;
 
 		[[nodiscard]]
-		constexpr const int& operator *() const
+		constexpr const int& get() const
 		{
 			++dereferenceCounter_const;
 			return dummyValue;
@@ -93,7 +93,7 @@ namespace sl::itr
 		int decrementCounter = 0;
 
 		[[nodiscard]]
-		constexpr const int& operator *() const
+		constexpr const int& get() const
 		{
 			++dereferenceCounter_const;
 			return dummyValue;
@@ -130,7 +130,7 @@ namespace sl::itr
 		mutable int distanceCounter = 0;
 
 		[[nodiscard]]
-		constexpr const int& operator *() const
+		constexpr const int& get() const
 		{
 			++dereferenceCounter_const;
 			return dummyValue;
