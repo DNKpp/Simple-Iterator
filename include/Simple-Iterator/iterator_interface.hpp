@@ -23,6 +23,7 @@ namespace sl::itr
 		requires std::is_class_v<TDerived> && std::same_as<TDerived, std::remove_cv_t<TDerived>>
 	class iterator_interface
 	{
+	private:
 		[[nodiscard]]
 		constexpr TDerived& cast() noexcept
 		{
@@ -43,6 +44,42 @@ namespace sl::itr
 				"iterator_interface's template argument TDerived must derive from iterator_interface."
 			);
 			return static_cast<const TDerived&>(*this);
+		}
+
+		template <class TDummy = TDerived>
+			requires requires(TDummy d) { d.increment(); }
+		constexpr TDerived& increment_impl() noexcept(noexcept(cast().increment()))
+		{
+			auto& self = cast();
+			self.increment();
+			return self;
+		}
+
+		template <class TDummy = TDerived>
+			requires (!requires(TDummy d) { d.increment(); })
+		constexpr TDerived& increment_impl() noexcept(noexcept(cast().advance(1)))
+		{
+			auto& self = cast();
+			self.advance(1);
+			return self;
+		}
+
+		template <class TDummy = TDerived>
+			requires requires(TDummy d) { d.decrement(); }
+		constexpr TDerived& decrement_impl() noexcept(noexcept(cast().decrement()))
+		{
+			auto& self = cast();
+			self.decrement();
+			return self;
+		}
+
+		template <class TDummy = TDerived>
+			requires (!requires(TDummy d) { d.decrement(); })
+		constexpr TDerived& decrement_impl() noexcept(noexcept(cast().advance(-1)))
+		{
+			auto& self = cast();
+			self.advance(-1);
+			return self;
 		}
 
 	public:
@@ -83,46 +120,40 @@ namespace sl::itr
 			return cast().get();
 		}
 
-		[[nodiscard]]
-		constexpr TDerived& operator ++() noexcept(noexcept(cast().increment()))
+		constexpr TDerived& operator ++() noexcept(noexcept(increment_impl()))
 		{
-			auto& self = cast();
-			self.increment();
-			return self;
+			return increment_impl();
 		}
 
-		constexpr void operator ++(int) noexcept(noexcept(cast().increment()))
+		constexpr void operator ++(int) noexcept(noexcept(increment_impl()))
 			requires (!std::copy_constructible<TDerived>)
 		{
-			cast().increment();
+			increment_impl();
 		}
 
 		[[nodiscard]]
-		constexpr TDerived operator ++(int) noexcept(noexcept(cast().increment()) && std::is_nothrow_copy_constructible_v<TDerived>)
+		constexpr TDerived operator ++(int) noexcept(noexcept(increment_impl()) && std::is_nothrow_copy_constructible_v<TDerived>)
 			requires std::copy_constructible<TDerived>
 		{
 			auto& self = cast();
 			auto tmp{ self };
-			self.increment();
+			increment_impl();
 			return tmp;
 		}
 
-		[[nodiscard]]
-		constexpr TDerived& operator --() noexcept(noexcept(cast().decrement()))
+		constexpr TDerived& operator --() noexcept(noexcept(decrement_impl()))
 			requires decrementable<TDerived>
 		{
-			auto& self = cast();
-			self.decrement();
-			return self;
+			return decrement_impl();
 		}
 
 		[[nodiscard]]
-		constexpr TDerived operator --(int) noexcept(noexcept(cast().decrement()) && std::is_nothrow_copy_constructible_v<TDerived>)
+		constexpr TDerived operator --(int) noexcept(noexcept(decrement_impl()) && std::is_nothrow_copy_constructible_v<TDerived>)
 			requires decrementable<TDerived>
 		{
 			auto& self = cast();
 			auto tmp{ self };
-			self.decrement();
+			decrement_impl();
 			return tmp;
 		}
 

@@ -32,7 +32,8 @@ TEMPLATE_TEST_CASE
 	TestInputIterator,
 	TestForwardIterator,
 	TestBidirectionalIterator,
-	TestRandomAccessIterator
+	TestRandomAccessIterator,
+	TestReducedRandomAccessIterator
 )
 #pragma warning(default: 26444)
 {
@@ -68,7 +69,8 @@ TEMPLATE_TEST_CASE
 	"[iterator_interface][forward_iterator]",
 	TestForwardIterator,
 	TestBidirectionalIterator,
-	TestRandomAccessIterator
+	TestRandomAccessIterator,
+	TestReducedRandomAccessIterator
 )
 #pragma warning(default: 26444)
 {
@@ -90,7 +92,8 @@ TEMPLATE_TEST_CASE
 	"Using test iterator types, iterator_interface should fulfill std::bidirectional_iterator concepts.",
 	"[iterator_interface][bidirectional_iterator]",
 	TestBidirectionalIterator,
-	TestRandomAccessIterator
+	TestRandomAccessIterator,
+	TestReducedRandomAccessIterator
 )
 #pragma warning(default: 26444)
 {
@@ -178,7 +181,8 @@ TEMPLATE_TEST_CASE
 (
 	"Using test iterator types, iterator_interface should fulfill std::random_access_iterator concepts.",
 	"[iterator_interface][random_access_iterator]",
-	TestRandomAccessIterator
+	TestRandomAccessIterator,
+	TestReducedRandomAccessIterator
 )
 #pragma warning(default: 26444)
 {
@@ -188,4 +192,60 @@ TEMPLATE_TEST_CASE
 	REQUIRE(std::sized_sentinel_for<Itr_t, Itr_t>);
 
 	REQUIRE(std::random_access_iterator<Itr_t>);
+}
+
+TEST_CASE
+(
+	"TestReducedRandomAccessIterator iterator_interface should invoke advance with 1 when incrementing.",
+	"[iterator_interface][input_iterator]"
+)
+{
+	TestReducedRandomAccessIterator itr;
+
+	SECTION("pre-increment")
+	{
+		++itr;
+
+		REQUIRE(itr.incrementCounter == 1);
+		REQUIRE(itr.lastAdvanceDist == 1);
+	}
+
+	SECTION("post-increment")
+	{
+		const auto secItr = itr++;
+
+		REQUIRE(itr.incrementCounter == 1);
+		REQUIRE(itr.lastAdvanceDist == 1);
+
+		REQUIRE(secItr.incrementCounter == 0);
+		REQUIRE(secItr.lastAdvanceDist == 0);
+	}
+}
+
+TEST_CASE
+(
+	"TestReducedRandomAccessIterator iterator_interface should invoke advance with -1 when decrementing.",
+	"[iterator_interface][input_iterator]"
+)
+{
+	TestReducedRandomAccessIterator itr;
+
+	SECTION("pre-decrement")
+	{
+		--itr;
+
+		REQUIRE(itr.decrementCounter == 1);
+		REQUIRE(itr.lastAdvanceDist == -1);
+	}
+
+	SECTION("post-decrement")
+	{
+		const auto secItr = itr--;
+
+		REQUIRE(itr.decrementCounter == 1);
+		REQUIRE(itr.lastAdvanceDist == -1);
+
+		REQUIRE(secItr.decrementCounter == 0);
+		REQUIRE(secItr.lastAdvanceDist == 0);
+	}
 }

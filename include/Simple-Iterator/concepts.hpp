@@ -51,23 +51,19 @@ namespace sl::itr
 		{ t.get() } -> non_void;
 	};
 
-	template <class T>
-	concept incrementable = requires(T t)
-	{
-		t.increment();
-	};
-
-	template <class T>
-	concept decrementable = requires(T& t)
-	{
-		t.decrement();
-	};
-
 	template <class T, class TDifferenceType>
 	concept advanceable_with = requires(T t, const TDifferenceType diff)
 	{
 		t.advance(diff);
 	};
+
+	template <class T>
+	concept incrementable = requires(T t) { t.increment(); } ||
+							advanceable_with<T, int>;
+
+	template <class T>
+	concept decrementable = requires(T t) { t.decrement(); } ||
+							advanceable_with<T, int>;
 
 	template <class T>
 	concept distanceable = requires(const T t)

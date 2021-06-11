@@ -161,6 +161,7 @@ TEMPLATE_TEST_CASE_SIG
 	(TestForwardIterator, true),
 	(TestBidirectionalIterator, true),
 	(TestRandomAccessIterator, true),
+	(TestReducedRandomAccessIterator, true),
 	(int*, false),
 	(int, false),
 	(void*, false),
