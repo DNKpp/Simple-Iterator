@@ -15,11 +15,7 @@
 
 namespace sl::itr
 {
-	template
-	<
-		iterator_category_tag TIteratorCategory,
-		class TDerived
-	>
+	template <class TDerived>
 		requires std::is_class_v<TDerived> && std::same_as<TDerived, std::remove_cv_t<TDerived>>
 	class iterator_interface
 	{
@@ -83,33 +79,32 @@ namespace sl::itr
 		}
 
 	public:
-		using iterator_concept = TIteratorCategory;
-
 		constexpr auto operator<=>(const iterator_interface&) const noexcept = default;
 
 		constexpr iterator_interface() noexcept
 		{
+			using itr_concept_t = typename TDerived::iterator_concept;
 			static_assert
 			(
-				!input_iterator_category_tag<TIteratorCategory> || input_iterator_suitable<TDerived>,
+				!input_iterator_category_tag<itr_concept_t> || input_iterator_suitable<TDerived>,
 				"iterator_interface's template argument TDerived must fulfill all constraints of input_iterator_suitable when using this iterator category."
 			);
 
 			static_assert
 			(
-				!forward_iterator_category_tag<TIteratorCategory> || forward_iterator_suitable<TDerived>,
+				!forward_iterator_category_tag<itr_concept_t> || forward_iterator_suitable<TDerived>,
 				"iterator_interface's template argument TDerived must fulfill all constraints of forward_iterator_suitable when using this iterator category."
 			);
 
 			static_assert
 			(
-				!bidirectional_iterator_category_tag<TIteratorCategory> || bidirectional_iterator_suitable<TDerived>,
+				!bidirectional_iterator_category_tag<itr_concept_t> || bidirectional_iterator_suitable<TDerived>,
 				"iterator_interface's template argument TDerived must fulfill all constraints of bidirectional_iterator_suitable when using this iterator category."
 			);
 
 			static_assert
 			(
-				!random_access_iterator_category_tag<TIteratorCategory> || random_access_iterator_suitable<TDerived>,
+				!random_access_iterator_category_tag<itr_concept_t> || random_access_iterator_suitable<TDerived>,
 				"iterator_interface's template argument TDerived must fulfill all constraints of random_access_iterator_suitable when using this iterator category."
 			);
 		}
@@ -167,7 +162,7 @@ namespace sl::itr
 			noexcept(std::declval<TDerived>().advance(std::forward<TDifference>(value))) &&
 			noexcept(cast().get())
 		)
-			requires (random_access_iterator_category_tag<TIteratorCategory> || advanceable_with<TDerived, TDifference>)
+			requires advanceable_with<TDerived, TDifference>
 		{
 			auto tmp{ cast() };
 			tmp.advance(std::forward<TDifference>(value));
@@ -246,10 +241,10 @@ namespace sl::itr
 
 	protected:
 		constexpr ~iterator_interface() noexcept = default;
-		constexpr iterator_interface(const iterator_interface&) noexcept = default;
-		constexpr iterator_interface& operator =(const iterator_interface&) noexcept = default;
-		constexpr iterator_interface(iterator_interface&&) noexcept = default;
-		constexpr iterator_interface& operator =(iterator_interface&&) noexcept = default;
+		constexpr iterator_interface(const iterator_interface&) = default;
+		constexpr iterator_interface& operator =(const iterator_interface&) = default;
+		constexpr iterator_interface(iterator_interface&&) = default;
+		constexpr iterator_interface& operator =(iterator_interface&&) = default;
 	};
 }
 

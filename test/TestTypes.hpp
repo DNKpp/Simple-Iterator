@@ -12,14 +12,11 @@
 
 namespace sl::itr
 {
-	struct TestInputIterator : public iterator_interface<std::input_iterator_tag, TestInputIterator>
+	struct TestInputIterator : public iterator_interface<TestInputIterator>
 	{
-	private:
-		using super = iterator_interface<std::input_iterator_tag, TestInputIterator>;
-
-	public:
 		using element_type = int;
 		using difference_type = std::ptrdiff_t;
+		using iterator_concept = std::input_iterator_tag;
 
 		TestInputIterator() = default;
 
@@ -46,14 +43,11 @@ namespace sl::itr
 		}
 	};
 
-	struct TestForwardIterator : public iterator_interface<std::forward_iterator_tag, TestForwardIterator>
+	struct TestForwardIterator : public iterator_interface<TestForwardIterator>
 	{
-	private:
-		using super = iterator_interface<std::forward_iterator_tag, TestForwardIterator>;
-
-	public:
 		using element_type = int;
 		using difference_type = std::ptrdiff_t;
+		using iterator_concept = std::forward_iterator_tag;
 
 		bool operator ==(const TestForwardIterator&) const = default;
 
@@ -75,14 +69,11 @@ namespace sl::itr
 		}
 	};
 
-	struct TestBidirectionalIterator : public iterator_interface<std::bidirectional_iterator_tag, TestBidirectionalIterator>
+	struct TestBidirectionalIterator : public iterator_interface<TestBidirectionalIterator>
 	{
-	private:
-		using super = iterator_interface<std::bidirectional_iterator_tag, TestBidirectionalIterator>;
-
-	public:
 		using element_type = int;
 		using difference_type = std::ptrdiff_t;
+		using iterator_concept = std::bidirectional_iterator_tag;
 
 		bool operator ==(const TestBidirectionalIterator&) const = default;
 
@@ -110,14 +101,11 @@ namespace sl::itr
 		}
 	};
 
-	struct TestRandomAccessIterator : public iterator_interface<std::random_access_iterator_tag, TestRandomAccessIterator>
+	struct TestRandomAccessIterator : public iterator_interface<TestRandomAccessIterator>
 	{
-	private:
-		using super = iterator_interface<std::random_access_iterator_tag, TestRandomAccessIterator>;
-
-	public:
 		using element_type = int;
 		using difference_type = std::ptrdiff_t;
+		using iterator_concept = std::random_access_iterator_tag;
 
 		auto operator <=>(const TestRandomAccessIterator&) const = default;
 
@@ -159,15 +147,11 @@ namespace sl::itr
 		}
 	};
 
-	struct TestReducedRandomAccessIterator : public iterator_interface<
-			std::random_access_iterator_tag, TestReducedRandomAccessIterator>
+	struct TestReducedRandomAccessIterator : public iterator_interface<TestReducedRandomAccessIterator>
 	{
-	private:
-		using super = iterator_interface<std::random_access_iterator_tag, TestReducedRandomAccessIterator>;
-
-	public:
 		using element_type = int;
 		using difference_type = std::ptrdiff_t;
+		using iterator_concept = std::random_access_iterator_tag;
 
 		auto operator <=>(const TestReducedRandomAccessIterator&) const = default;
 
