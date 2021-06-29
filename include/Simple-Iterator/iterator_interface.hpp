@@ -125,7 +125,9 @@ namespace sl::itr
 		}
 
 	public:
+		using iterator_category = TIteratorCategory;
 		using iterator_concept = TIteratorCategory;
+		using value_type = TValueType;
 		using element_type = TValueType;
 		using difference_type = TDifferenceType;
 
