@@ -46,6 +46,41 @@ namespace sl::itr::detail
 		itr.advance(-1);
 		return itr;
 	}
+
+	template <class TInterface, class TDerived>
+	void static_itr_checks()
+	{
+		static_assert
+		(
+			std::derived_from<TDerived, TInterface>,
+			"iterator_interface's template argument TDerived must derive from iterator_interface."
+		);
+
+		using itr_concept_t = typename TDerived::iterator_concept;
+		static_assert
+		(
+			!input_iterator_category_tag<itr_concept_t> || input_iterator_suitable<TDerived>,
+			"iterator_interface's template argument TDerived must fulfill all constraints of input_iterator_suitable when using this iterator category."
+		);
+
+		static_assert
+		(
+			!forward_iterator_category_tag<itr_concept_t> || forward_iterator_suitable<TDerived>,
+			"iterator_interface's template argument TDerived must fulfill all constraints of forward_iterator_suitable when using this iterator category."
+		);
+
+		static_assert
+		(
+			!bidirectional_iterator_category_tag<itr_concept_t> || bidirectional_iterator_suitable<TDerived>,
+			"iterator_interface's template argument TDerived must fulfill all constraints of bidirectional_iterator_suitable when using this iterator category."
+		);
+
+		static_assert
+		(
+			!random_access_iterator_category_tag<itr_concept_t> || random_access_iterator_suitable<TDerived>,
+			"iterator_interface's template argument TDerived must fulfill all constraints of random_access_iterator_suitable when using this iterator category."
+		);
+	}
 }
 
 namespace sl::itr
@@ -58,55 +93,21 @@ namespace sl::itr
 		[[nodiscard]]
 		constexpr TDerived& cast() noexcept
 		{
-			static_assert
-			(
-				std::derived_from<TDerived, iterator_interface>,
-				"iterator_interface's template argument TDerived must derive from iterator_interface."
-			);
+			detail::static_itr_checks<iterator_interface, TDerived>();
 			return static_cast<TDerived&>(*this);
 		}
 
 		[[nodiscard]]
 		constexpr const TDerived& cast() const noexcept
 		{
-			static_assert
-			(
-				std::derived_from<TDerived, iterator_interface>,
-				"iterator_interface's template argument TDerived must derive from iterator_interface."
-			);
+			detail::static_itr_checks<iterator_interface, TDerived>();
 			return static_cast<const TDerived&>(*this);
 		}
 
 	public:
+		constexpr iterator_interface() noexcept = default;
+
 		constexpr auto operator<=>(const iterator_interface&) const noexcept = default;
-
-		constexpr iterator_interface() noexcept
-		{
-			using itr_concept_t = typename TDerived::iterator_concept;
-			static_assert
-			(
-				!input_iterator_category_tag<itr_concept_t> || input_iterator_suitable<TDerived>,
-				"iterator_interface's template argument TDerived must fulfill all constraints of input_iterator_suitable when using this iterator category."
-			);
-
-			static_assert
-			(
-				!forward_iterator_category_tag<itr_concept_t> || forward_iterator_suitable<TDerived>,
-				"iterator_interface's template argument TDerived must fulfill all constraints of forward_iterator_suitable when using this iterator category."
-			);
-
-			static_assert
-			(
-				!bidirectional_iterator_category_tag<itr_concept_t> || bidirectional_iterator_suitable<TDerived>,
-				"iterator_interface's template argument TDerived must fulfill all constraints of bidirectional_iterator_suitable when using this iterator category."
-			);
-
-			static_assert
-			(
-				!random_access_iterator_category_tag<itr_concept_t> || random_access_iterator_suitable<TDerived>,
-				"iterator_interface's template argument TDerived must fulfill all constraints of random_access_iterator_suitable when using this iterator category."
-			);
-		}
 
 		[[nodiscard]]
 		constexpr decltype(auto) operator *() const noexcept(noexcept(cast().get()))
