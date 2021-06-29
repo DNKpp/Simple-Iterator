@@ -68,7 +68,8 @@ namespace sl::itr
 	template <class T>
 	concept distanceable = requires(const T t)
 	{
-		{ t.distance(t) } -> std::same_as<std::iter_difference_t<T>>;
+		// due to clang, can't rely on std::iter_difference_t<T>
+		{ t.distance(t) } -> std::same_as<typename T::difference_type>;
 	};
 
 	template <class T>
@@ -87,7 +88,8 @@ namespace sl::itr
 
 	template <class T>
 	concept random_access_iterator_suitable = bidirectional_iterator_suitable<T> &&
-											advanceable_with<T, std::iter_difference_t<T>> &&
+											// due to clang, can't rely on std::iter_difference_t<T>
+											advanceable_with<T, typename T::difference_type> &&
 											distanceable<T>;
 }
 
