@@ -13,7 +13,7 @@ using namespace sl::itr;
 
 TEST_CASE
 (
-	"input_iterator_tag iterator_interface should invoke pre-increment operator when post-incrementing.",
+	"input_iterator_tag iterator_interface should invoke increment when post-incrementing.",
 	"[iterator_interface][input_iterator]"
 )
 {
@@ -53,7 +53,7 @@ TEMPLATE_TEST_CASE
 
 TEST_CASE
 (
-	"TestForwardIterator iterator_interface should invoke pre-increment operator when post-incrementing and receive a valid copy.",
+	"TestForwardIterator iterator_interface should invoke increment when post-incrementing and receive a valid copy.",
 	"[iterator_interface][forward_iterator]"
 )
 {
@@ -110,7 +110,7 @@ TEMPLATE_TEST_CASE
 
 TEST_CASE
 (
-	"TestBidirectionalIterator iterator_interface should invoke pre-decrement operator when post-decrementing and receive a valid copy.",
+	"TestBidirectionalIterator iterator_interface should invoke decrement when post-decrementing and receive a valid copy.",
 	"[iterator_interface][forward_iterator]"
 )
 {
@@ -123,7 +123,7 @@ TEST_CASE
 
 TEST_CASE
 (
-	"TestRandomAccesslIterator iterator_interface should invoke operator += when using random access operations.",
+	"TestRandomAccesslIterator iterator_interface should invoke advance when using random access operations.",
 	"[iterator_interface][forward_iterator]"
 )
 {
