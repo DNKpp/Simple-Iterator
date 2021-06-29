@@ -48,7 +48,7 @@ namespace sl::itr::detail
 	}
 
 	template <class TInterface, class TDerived>
-	void static_itr_checks()
+	void static_itr_checks() noexcept
 	{
 		static_assert
 		(
@@ -110,7 +110,7 @@ namespace sl::itr
 		constexpr auto operator<=>(const iterator_interface&) const noexcept = default;
 
 		[[nodiscard]]
-		constexpr decltype(auto) operator *() const noexcept(noexcept(cast().get()))
+		constexpr decltype(auto) operator *() const noexcept(noexcept(std::declval<TDerived>().get()))
 		{
 			return cast().get();
 		}
@@ -167,7 +167,7 @@ namespace sl::itr
 		(
 			std::is_nothrow_copy_constructible_v<TDerived> &&
 			noexcept(std::declval<TDerived>().advance(std::forward<TDifference>(value))) &&
-			noexcept(cast().get())
+			noexcept(std::declval<TDerived&>().get())
 		)
 			requires advanceable_with<TDerived, TDifference>
 		{
@@ -177,7 +177,10 @@ namespace sl::itr
 		}
 
 		template <class TDifference>
-		constexpr TDerived& operator +=(TDifference&& value) noexcept(noexcept(cast().advance(std::forward<TDifference>(value))))
+		constexpr TDerived& operator +=
+		(
+			TDifference&& value
+		) noexcept(noexcept(std::declval<TDerived>().advance(std::forward<TDifference>(value))))
 			requires advanceable_with<TDerived, TDifference>
 		{
 			auto& self = cast();
@@ -186,7 +189,8 @@ namespace sl::itr
 		}
 
 		template <class TDifference>
-		constexpr TDerived& operator -=(TDifference&& value) noexcept(noexcept(cast() += std::forward<TDifference>(value)))
+		constexpr TDerived& operator -=
+		(TDifference&& value) noexcept(noexcept(std::declval<TDerived>() += std::forward<TDifference>(value)))
 			requires advanceable_with<TDerived, TDifference>
 		{
 			value *= -1;
