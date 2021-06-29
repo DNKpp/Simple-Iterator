@@ -72,16 +72,8 @@ namespace sl::itr
 	};
 
 	template <class T>
-	concept resolvable_value_type = requires { typename std::iter_value_t<T>; };
-
-	template <class T>
-	concept resolvable_difference_type = requires { typename std::iter_difference_t<T>; };
-
-	template <class T>
 	concept input_iterator_suitable = std::default_initializable<T> &&
 									std::movable<T> &&
-									resolvable_value_type<T> &&
-									resolvable_difference_type<T> &&
 									dereferencable<const T> &&
 									incrementable<T>;
 
