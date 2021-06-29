@@ -49,6 +49,8 @@ namespace sl::itr
 		using difference_type = std::ptrdiff_t;
 		using iterator_concept = std::forward_iterator_tag;
 
+		TestForwardIterator() = default;
+
 		bool operator ==(const TestForwardIterator&) const = default;
 
 		int dummyValue = 0;
@@ -74,6 +76,8 @@ namespace sl::itr
 		using element_type = int;
 		using difference_type = std::ptrdiff_t;
 		using iterator_concept = std::bidirectional_iterator_tag;
+
+		TestBidirectionalIterator() = default;
 
 		bool operator ==(const TestBidirectionalIterator&) const = default;
 
@@ -106,6 +110,8 @@ namespace sl::itr
 		using element_type = int;
 		using difference_type = std::ptrdiff_t;
 		using iterator_concept = std::random_access_iterator_tag;
+
+		TestRandomAccessIterator() = default;
 
 		auto operator <=>(const TestRandomAccessIterator&) const = default;
 
@@ -152,6 +158,8 @@ namespace sl::itr
 		using element_type = int;
 		using difference_type = std::ptrdiff_t;
 		using iterator_concept = std::random_access_iterator_tag;
+
+		TestReducedRandomAccessIterator() = default;
 
 		auto operator <=>(const TestReducedRandomAccessIterator&) const = default;
 
