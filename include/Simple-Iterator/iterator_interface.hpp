@@ -120,19 +120,21 @@ namespace sl::itr
 			return detail::increment(cast());
 		}
 
+		template <class TDummy = TDerived>
+			requires (!std::copy_constructible<TDummy>)
 		constexpr void operator ++(int) noexcept(noexcept(detail::increment(std::declval<TDerived&>())))
-			requires (!std::copy_constructible<TDerived>)
 		{
 			detail::increment(cast());
 		}
 
+		template <class TDummy = TDerived>
+			requires std::copy_constructible<TDummy>
 		[[nodiscard]]
 		constexpr TDerived operator ++
 		(
 			int
 		) noexcept(noexcept(detail::increment(std::declval<TDerived&>())) &&
 					std::is_nothrow_copy_constructible_v<TDerived>)
-			requires std::copy_constructible<TDerived>
 		{
 			auto& self = cast();
 			auto tmp{ self };
@@ -140,18 +142,20 @@ namespace sl::itr
 			return tmp;
 		}
 
+		template <class TDummy = TDerived>
+			requires decrementable<TDummy>
 		constexpr TDerived& operator --() noexcept(noexcept(detail::decrement(std::declval<TDerived&>())))
-			requires decrementable<TDerived>
 		{
 			return detail::decrement(cast());
 		}
 
+		template <class TDummy = TDerived>
+			requires decrementable<TDummy>
 		[[nodiscard]]
 		constexpr TDerived operator --
 		(
 			int
 		) noexcept(noexcept(detail::decrement(std::declval<TDerived&>())) && std::is_nothrow_copy_constructible_v<TDerived>)
-			requires decrementable<TDerived>
 		{
 			auto& self = cast();
 			auto tmp{ self };
@@ -159,7 +163,8 @@ namespace sl::itr
 			return tmp;
 		}
 
-		template <class TDifference>
+		template <class TDifference, class TDummy = TDerived>
+			requires advanceable_with<TDummy, TDifference>
 		constexpr decltype(auto) operator []
 		(
 			TDifference&& value
@@ -169,29 +174,28 @@ namespace sl::itr
 			noexcept(std::declval<TDerived>().advance(std::forward<TDifference>(value))) &&
 			noexcept(std::declval<TDerived&>().get())
 		)
-			requires advanceable_with<TDerived, TDifference>
 		{
 			auto tmp{ cast() };
 			tmp.advance(std::forward<TDifference>(value));
 			return tmp.get();
 		}
 
-		template <class TDifference>
+		template <class TDifference, class TDummy = TDerived>
+			requires advanceable_with<TDummy, TDifference>
 		constexpr TDerived& operator +=
 		(
 			TDifference&& value
 		) noexcept(noexcept(std::declval<TDerived>().advance(std::forward<TDifference>(value))))
-			requires advanceable_with<TDerived, TDifference>
 		{
 			auto& self = cast();
 			self.advance(std::forward<TDifference>(value));
 			return self;
 		}
 
-		template <class TDifference>
+		template <class TDifference, class TDummy = TDerived>
+			requires advanceable_with<TDummy, TDifference>
 		constexpr TDerived& operator -=
 		(TDifference&& value) noexcept(noexcept(std::declval<TDerived>() += std::forward<TDifference>(value)))
-			requires advanceable_with<TDerived, TDifference>
 		{
 			value *= -1;
 			auto& self = cast();
@@ -238,6 +242,8 @@ namespace sl::itr
 			return itr;
 		}
 
+		template <class TDummy = TDerived>
+			requires requires(TDummy d) { d.distance(d); }
 		[[nodiscard]]
 		friend constexpr auto operator -
 		(
@@ -245,7 +251,6 @@ namespace sl::itr
 			const TDerived& rhs
 		)
 		noexcept(noexcept(lhs.distance(rhs)))
-			requires requires { lhs.distance(rhs); }
 		{
 			return lhs.distance(rhs);
 		}
