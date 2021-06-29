@@ -95,6 +95,7 @@ namespace sl::itr
 
 	template <class T>
 	concept random_access_iterator_suitable = bidirectional_iterator_suitable<T> &&
+											std::totally_ordered<T> &&
 											// due to clang, can't rely on std::iter_difference_t<T>
 											advanceable_with<T, typename T::difference_type> &&
 											distanceable<T>;
