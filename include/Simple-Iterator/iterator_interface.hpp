@@ -30,6 +30,22 @@ namespace sl::itr::detail
 		itr.advance(1);
 		return itr;
 	}
+
+	template <class TIterator>
+		requires requires(TIterator d) { d.decrement(); }
+	constexpr TIterator& decrement(TIterator& itr) noexcept(noexcept(itr.decrement()))
+	{
+		itr.decrement();
+		return itr;
+	}
+
+	template <class TIterator>
+		requires (!requires(TIterator d) { d.decrement(); })
+	constexpr TIterator& decrement(TIterator& itr) noexcept(noexcept(itr.advance(-1)))
+	{
+		itr.advance(-1);
+		return itr;
+	}
 }
 
 namespace sl::itr
@@ -59,24 +75,6 @@ namespace sl::itr
 				"iterator_interface's template argument TDerived must derive from iterator_interface."
 			);
 			return static_cast<const TDerived&>(*this);
-		}
-
-		template <class TDummy = TDerived>
-			requires requires(TDummy d) { d.decrement(); }
-		constexpr TDerived& decrement_impl() noexcept(noexcept(cast().decrement()))
-		{
-			auto& self = cast();
-			self.decrement();
-			return self;
-		}
-
-		template <class TDummy = TDerived>
-			requires (!requires(TDummy d) { d.decrement(); })
-		constexpr TDerived& decrement_impl() noexcept(noexcept(cast().advance(-1)))
-		{
-			auto& self = cast();
-			self.advance(-1);
-			return self;
 		}
 
 	public:
@@ -141,19 +139,22 @@ namespace sl::itr
 			return tmp;
 		}
 
-		constexpr TDerived& operator --() noexcept(noexcept(decrement_impl()))
+		constexpr TDerived& operator --() noexcept(noexcept(detail::decrement(std::declval<TDerived&>())))
 			requires decrementable<TDerived>
 		{
-			return decrement_impl();
+			return detail::decrement(cast());
 		}
 
 		[[nodiscard]]
-		constexpr TDerived operator --(int) noexcept(noexcept(decrement_impl()) && std::is_nothrow_copy_constructible_v<TDerived>)
+		constexpr TDerived operator --
+		(
+			int
+		) noexcept(noexcept(detail::decrement(std::declval<TDerived&>())) && std::is_nothrow_copy_constructible_v<TDerived>)
 			requires decrementable<TDerived>
 		{
 			auto& self = cast();
 			auto tmp{ self };
-			decrement_impl();
+			detail::decrement(self);
 			return tmp;
 		}
 
