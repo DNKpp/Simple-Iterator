@@ -46,7 +46,7 @@ target_link_libraries(
 ```
 This will add the the include path "<simple_iterator_install_dir>/include", thus you are able to include the headers via
 ```cpp
-#include <Simple-Iterator/input_iterator.hpp>
+#include <Simple-Iterator/iterator_interface.hpp>
 ```
 
 ### FetchContent
