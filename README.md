@@ -24,9 +24,14 @@ Mail: [DNKpp2011@gmail.com](mailto:dnkpp2011@gmail.com)
 ```
 
 ## Description
-This library provides easy to use ``c++20`` iterator like classes, one for most of the std iterator categories (currently excluding output_iterator). Even with ``c++20`` it is rather tedious to write custom iterator classes,
-thus this library aims to take over the boilerplate, but opens up various customization points for the users. Be aware that many clang and gcc versions doesn't finally support all used ``c++20`` features.
-Have a look at the badges on top, to get an idea which one might fit.
+This library provides an iterator_interface class, which aims to reduce the boilerplate needed for ``c++20`` iterator like classes. Users must simply inherit from that class,
+provide some minimal template arguments and implement a minimal amount of methods (depending on the aimed category) until the custom iterator is ready for use.
+Everything is checked via concepts, thus it should be quite easy to find the missing or wrong parts in your definition. Have a look into the wiki, if you need a more in depth
+explanation or simply some examples.
+
+I took the new std::ranges::view_interface as an inspiration how to design such a class.
+
+Be aware that many clang and gcc versions doesn't finally support all used ``c++20`` features. Have a look at the badges on top, to get an idea which one might fit.
 
 
 ## Installation with CMake
@@ -57,7 +62,7 @@ include(FetchContent)
 FetchContent_Declare(
 	simple_iterator
 	GIT_REPOSITORY	https://github.com/DNKpp/Simple-Iterator
-	GIT_TAG		origin/master
+	GIT_TAG		origin/v1.x
 )
 FetchContent_MakeAvailable(simple_iterator)
 
