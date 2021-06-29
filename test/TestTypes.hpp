@@ -137,9 +137,9 @@ namespace sl::itr
 		}
 	};
 
-	struct TestReducedRandomAccessIterator : public iterator_interface<TestReducedRandomAccessIterator, std::random_access_iterator_tag, int>
+	struct TestReducedRandomAccessIterator : public iterator_interface<
+			TestReducedRandomAccessIterator, std::random_access_iterator_tag, int>
 	{
-
 		TestReducedRandomAccessIterator() = default;
 
 		auto operator <=>(const TestReducedRandomAccessIterator&) const = default;
@@ -171,6 +171,104 @@ namespace sl::itr
 
 		[[nodiscard]]
 		constexpr std::ptrdiff_t distance(const TestReducedRandomAccessIterator& rhs) const
+		{
+			++distanceCounter;
+			return 0;
+		}
+	};
+
+	struct TestGetContiguousIterator : public iterator_interface<TestGetContiguousIterator, std::contiguous_iterator_tag, int>
+	{
+		TestGetContiguousIterator() = default;
+
+		auto operator <=>(const TestGetContiguousIterator&) const = default;
+
+		int dummyValue = 0;
+
+		mutable int dereferenceCounter_const = 0;
+		mutable int ptrDereferenceCounter_const = 0;
+		int incrementCounter = 0;
+		int decrementCounter = 0;
+		int advanceCounter = 0;
+		mutable int distanceCounter = 0;
+
+		[[nodiscard]]
+		constexpr const int& get() const
+		{
+			++dereferenceCounter_const;
+			++ptrDereferenceCounter_const;
+			return dummyValue;
+		}
+
+		constexpr void increment()
+		{
+			++incrementCounter;
+		}
+
+		constexpr void decrement()
+		{
+			++decrementCounter;
+		}
+
+		constexpr void advance(std::ptrdiff_t diff)
+		{
+			++advanceCounter;
+		}
+
+		[[nodiscard]]
+		constexpr std::ptrdiff_t distance(const TestGetContiguousIterator& rhs) const
+		{
+			++distanceCounter;
+			return 0;
+		}
+	};
+
+	struct TestGetPtrContiguousIterator : public iterator_interface<TestGetPtrContiguousIterator, std::contiguous_iterator_tag, int>
+	{
+		TestGetPtrContiguousIterator() = default;
+
+		auto operator <=>(const TestGetPtrContiguousIterator&) const = default;
+
+		int dummyValue = 0;
+
+		mutable int dereferenceCounter_const = 0;
+		mutable int ptrDereferenceCounter_const = 0;
+		int incrementCounter = 0;
+		int decrementCounter = 0;
+		int advanceCounter = 0;
+		mutable int distanceCounter = 0;
+
+		[[nodiscard]]
+		constexpr const int& get() const
+		{
+			++dereferenceCounter_const;
+			return dummyValue;
+		}
+
+		[[nodiscard]]
+		constexpr const int* get_ptr() const
+		{
+			++ptrDereferenceCounter_const;
+			return &dummyValue;
+		}
+
+		constexpr void increment()
+		{
+			++incrementCounter;
+		}
+
+		constexpr void decrement()
+		{
+			++decrementCounter;
+		}
+
+		constexpr void advance(std::ptrdiff_t diff)
+		{
+			++advanceCounter;
+		}
+
+		[[nodiscard]]
+		constexpr std::ptrdiff_t distance(const TestGetPtrContiguousIterator& rhs) const
 		{
 			++distanceCounter;
 			return 0;

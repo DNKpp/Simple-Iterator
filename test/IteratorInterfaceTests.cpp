@@ -33,7 +33,9 @@ TEMPLATE_TEST_CASE
 	TestForwardIterator,
 	TestBidirectionalIterator,
 	TestRandomAccessIterator,
-	TestReducedRandomAccessIterator
+	TestReducedRandomAccessIterator,
+	TestGetPtrContiguousIterator,
+	TestGetContiguousIterator
 )
 #pragma warning(default: 26444)
 {
@@ -70,7 +72,9 @@ TEMPLATE_TEST_CASE
 	TestForwardIterator,
 	TestBidirectionalIterator,
 	TestRandomAccessIterator,
-	TestReducedRandomAccessIterator
+	TestReducedRandomAccessIterator,
+	TestGetPtrContiguousIterator,
+	TestGetContiguousIterator
 )
 #pragma warning(default: 26444)
 {
@@ -93,7 +97,9 @@ TEMPLATE_TEST_CASE
 	"[iterator_interface][bidirectional_iterator]",
 	TestBidirectionalIterator,
 	TestRandomAccessIterator,
-	TestReducedRandomAccessIterator
+	TestReducedRandomAccessIterator,
+	TestGetPtrContiguousIterator,
+	TestGetContiguousIterator
 )
 #pragma warning(default: 26444)
 {
@@ -182,7 +188,9 @@ TEMPLATE_TEST_CASE
 	"Using test iterator types, iterator_interface should fulfill std::random_access_iterator concepts.",
 	"[iterator_interface][random_access_iterator]",
 	TestRandomAccessIterator,
-	TestReducedRandomAccessIterator
+	TestReducedRandomAccessIterator,
+	TestGetPtrContiguousIterator,
+	TestGetContiguousIterator
 )
 #pragma warning(default: 26444)
 {
@@ -248,4 +256,38 @@ TEST_CASE
 		REQUIRE(secItr.decrementCounter == 0);
 		REQUIRE(secItr.lastAdvanceDist == 0);
 	}
+}
+
+#pragma warning(disable: 26444)
+TEMPLATE_TEST_CASE
+(
+	"Using test iterator types, iterator_interface should fulfill std::contiguous_iterator concepts.",
+	"[iterator_interface][contiguous_access_iterator]",
+	TestGetPtrContiguousIterator,
+	TestGetContiguousIterator
+)
+#pragma warning(default: 26444)
+{
+	using Itr_t = TestType;
+
+	REQUIRE(std::contiguous_iterator<Itr_t>);
+}
+
+#pragma warning(disable: 26444)
+TEMPLATE_TEST_CASE
+(
+	"TestGetContiguousIterator iterator_interface should call the expected get(_ptr) function when using arrow operator.",
+	"[iterator_interface][contiguous_access_iterator]",
+	TestGetPtrContiguousIterator,
+	TestGetContiguousIterator
+)
+#pragma warning(default: 26444)
+{
+	using Itr_t = TestType;
+
+	Itr_t itr;
+
+	itr.operator->();
+
+	REQUIRE(itr.ptrDereferenceCounter_const == 1);
 }

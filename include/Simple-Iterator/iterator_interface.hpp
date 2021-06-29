@@ -47,6 +47,20 @@ namespace sl::itr::detail
 		return itr;
 	}
 
+	template <class TIterator>
+		requires requires(const TIterator& d) { d.get_ptr(); }
+	constexpr decltype(auto) get_ptr(const TIterator& itr) noexcept(noexcept(itr.get_ptr()))
+	{
+		return itr.get_ptr();
+	}
+
+	template <class TIterator>
+		requires (!requires(const TIterator& d) { d.get_ptr(); })
+	constexpr decltype(auto) get_ptr(const TIterator& itr) noexcept(noexcept(itr.get()))
+	{
+		return std::addressof(itr.get());
+	}
+
 	template <class TInterface, class TDerived>
 	constexpr void static_itr_checks() noexcept
 	{
@@ -79,6 +93,12 @@ namespace sl::itr::detail
 		(
 			!random_access_iterator_category_tag<itr_concept_t> || random_access_iterator_suitable<TDerived>,
 			"iterator_interface's template argument TDerived must fulfill all constraints of random_access_iterator_suitable when using this iterator category."
+		);
+
+		static_assert
+		(
+			!contiguous_iterator_category_tag<itr_concept_t> || contiguous_iterator_suitable<TDerived>,
+			"iterator_interface's template argument TDerived must fulfill all constraints of contiguous_iterator_suitable when using this iterator category."
 		);
 	}
 }
@@ -197,12 +217,21 @@ namespace sl::itr
 		template <class TDifference, class TDummy = TDerived>
 			requires advanceable_with<TDummy, TDifference>
 		constexpr TDerived& operator -=
-		(TDifference&& value) noexcept(noexcept(std::declval<TDerived>() += std::forward<TDifference>(value)))
+		(
+			TDifference&& value
+		) noexcept(noexcept(std::declval<TDerived>() += std::forward<TDifference>(value)))
 		{
 			value *= -1;
 			auto& self = cast();
 			self.advance(std::forward<TDifference>(value));
 			return self;
+		}
+
+		template <class TDummy = TDerived>
+			requires pointer_dereferencable<TDummy>
+		constexpr decltype(auto) operator ->() const /*noexcept(noexcept(detail::get_ptr(std::declval<const TDerived&>())))*/
+		{
+			return detail::get_ptr(cast());
 		}
 
 		template <class TDifference>
