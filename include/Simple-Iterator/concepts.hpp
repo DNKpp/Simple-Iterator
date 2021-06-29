@@ -40,16 +40,23 @@ namespace sl::itr
 	concept iterator_category_tag = output_iterator_category_tag<T> || input_iterator_category_tag<T>;
 
 	template <class T>
-	concept non_void = !std::same_as<T, void>;
+	concept non_void = !std::is_void_v<T>;
 
 	template <class T>
 	concept pointer_type = std::is_pointer_v<T>;
+
+	template <class T>
+	concept lvalue_reference_type = std::is_lvalue_reference_v<T>;
 
 	template <class T>
 	concept dereferencable = requires(T& t)
 	{
 		{ t.get() } -> non_void;
 	};
+
+	template <class T>
+	concept pointer_dereferencable = requires(T& t) { { t.get_ptr() } -> pointer_type; } ||
+									requires(T& t) { { t.get() } -> lvalue_reference_type; };
 
 	template <class T, class TDifferenceType>
 	concept advanceable_with = requires(T t, const TDifferenceType diff)
@@ -91,6 +98,10 @@ namespace sl::itr
 											// due to clang, can't rely on std::iter_difference_t<T>
 											advanceable_with<T, typename T::difference_type> &&
 											distanceable<T>;
+
+	template <class T>
+	concept contiguous_iterator_suitable = random_access_iterator_suitable<T> &&
+											pointer_dereferencable<const T>;
 }
 
 #endif

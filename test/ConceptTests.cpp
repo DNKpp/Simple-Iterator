@@ -269,3 +269,18 @@ TEMPLATE_TEST_CASE_SIG
 {
 	REQUIRE(random_access_iterator_suitable<T> == VExpected);
 }
+
+#pragma warning(disable: 26444)
+TEMPLATE_TEST_CASE_SIG
+(
+	"contiguous_iterator_suitable concept should detect valid types",
+	"[concept]",
+	((class T, bool VExpected), T, VExpected),
+	(TestGetContiguousIterator, true),
+	(int, false),
+	(void, false)
+)
+#pragma warning(default: 26444)
+{
+	REQUIRE(contiguous_iterator_suitable<T> == VExpected);
+}
