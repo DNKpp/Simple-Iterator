@@ -85,7 +85,7 @@ namespace sl::itr::detail
 
 namespace sl::itr
 {
-	template <class TDerived>
+	template <class TDerived, iterator_category_tag TIteratorCategory, class TValueType, class TDifferenceType = std::ptrdiff_t>
 		requires std::is_class_v<TDerived> && std::same_as<TDerived, std::remove_cv_t<TDerived>>
 	class iterator_interface
 	{
@@ -105,7 +105,9 @@ namespace sl::itr
 		}
 
 	public:
-		constexpr iterator_interface() noexcept = default;
+		using iterator_concept = TIteratorCategory;
+		using element_type = TValueType;
+		using difference_type = TDifferenceType;
 
 		constexpr auto operator<=>(const iterator_interface&) const noexcept = default;
 
@@ -256,6 +258,7 @@ namespace sl::itr
 		}
 
 	protected:
+		constexpr iterator_interface() noexcept = default;
 		constexpr ~iterator_interface() noexcept = default;
 		constexpr iterator_interface(const iterator_interface&) = default;
 		constexpr iterator_interface& operator =(const iterator_interface&) = default;
