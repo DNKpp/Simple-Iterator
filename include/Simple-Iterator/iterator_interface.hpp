@@ -48,7 +48,7 @@ namespace sl::itr::detail
 	}
 
 	template <class TInterface, class TDerived>
-	void static_itr_checks() noexcept
+	constexpr void static_itr_checks() noexcept
 	{
 		static_assert
 		(
