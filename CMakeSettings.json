@@ -98,6 +98,11 @@
 					"name": "CMAKE_C_COMPILER",
 					"value": "clang",
 					"type": "FILEPATH"
+				},
+				{
+					"name": "CMAKE_CXX_COMPILER",
+					"value": "clang",
+					"type": "FILEPATH"
 				}
 			]
 		},
